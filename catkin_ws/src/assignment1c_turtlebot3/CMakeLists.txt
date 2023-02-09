@@ -115,6 +115,9 @@ catkin_install_python(PROGRAMS scripts/circle.py
 catkin_install_python(PROGRAMS scripts/circle_SelfLaunch.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+catkin_install_python(PROGRAMS scripts/square.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ###########
 ## Build ##

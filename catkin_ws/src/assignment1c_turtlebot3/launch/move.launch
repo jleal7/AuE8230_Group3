@@ -35,8 +35,8 @@
   
   <group if="$(eval arg('code') == 'square')">
     <!--ROHIT OR VASATH SET YOUR PARAMETERS HERE FOR SQUARE.PY!!! These are just copy pastes from my circle.py, feel free to change them.-->
-    <arg name="v_x" default = "1"/>
-    <arg name="w_z" default = "1"/>
+    <arg name="v_x" default = "0.3"/>
+    <arg name="w_z" default = "0.3"/>
     
     <!--node I added to control turtlebot inside of Gazebo by using Python script-->
     <node pkg="assignment1c_turtlebot3" type="square.py" name="PythonScript">

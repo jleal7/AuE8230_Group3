@@ -24,6 +24,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment1c_turtlebot3/CMakeLists.txt"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment1c_turtlebot3/package.xml"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment1c_turtlebot3/scripts/circle.py"
+  "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment1c_turtlebot3/scripts/circle_SelfLaunch.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_simulations/turtlebot3_fake/CMakeLists.txt"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_simulations/turtlebot3_fake/package.xml"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_simulations/turtlebot3_gazebo/CMakeLists.txt"

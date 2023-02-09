@@ -112,6 +112,9 @@ catkin_package(
 catkin_install_python(PROGRAMS scripts/circle.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+catkin_install_python(PROGRAMS scripts/circle_SelfLaunch.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ###########
 ## Build ##

@@ -1,0 +1,50 @@
+<launch>
+
+  <!--copy paste of turtlebot3_empty_world.launch-->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos" default="0.0"/>
+  <arg name="y_pos" default="0.0"/>
+  <arg name="z_pos" default="0.0"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/empty.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+  
+  
+  <!--whole "group" of code only runs if condition is true-->
+  <group if="$(eval arg('code') == 'circle')">
+    <!--Set default values for v_x and w_z. Slow = 0.1 for both. Med = 0.3 for both. Fast = 1 for both-->
+    <arg name="v_x" default = "0.3"/>
+    <arg name="w_z" default = "0.3"/>
+    
+    <!--node I added to control turtlebot inside of Gazebo by using Python script-->
+    <node pkg="assignment1c_turtlebot3" type="circle.py" name="PythonScript">
+      <param name="v_x" value="$(arg v_x)"/>
+      <param name="w_z" value="$(arg w_z)"/>
+    </node>
+  </group>
+  
+  <group if="$(eval arg('code') == 'square')">
+    <!--ROHIT OR VASATH SET YOUR PARAMETERS HERE FOR SQUARE.PY!!! These are just copy pastes from my circle.py, feel free to change them.-->
+    <arg name="v_x" default = "1"/>
+    <arg name="w_z" default = "1"/>
+    
+    <!--node I added to control turtlebot inside of Gazebo by using Python script-->
+    <node pkg="assignment1c_turtlebot3" type="square.py" name="PythonScript">
+      <!--ALSO NEED TO CALL THE PARAMETERS YOU CREATED ABOVE HERE!!!-->
+      <param name="v_x" value="$(arg v_x)"/>
+      <param name="w_z" value="$(arg w_z)"/>
+    </node>
+  </group>
+  
+  
+</launch>

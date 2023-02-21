@@ -1,0 +1,8 @@
+prefix=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/install
+
+Name: assignment2B_turtlebotteleop
+Description: Description of assignment2B_turtlebotteleop
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

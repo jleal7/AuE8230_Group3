@@ -9,7 +9,7 @@ Basically, we had to choose a v_x and w_z that would create a circle that fit in
 
 We started by setting v_x and w_z to 1. This made a circle, as expected. We then multiplied both by v_x and w_z by 2 and got a way smaller circle. We knew something was wrong. We didn't know what units the turtlebot was interpretting when we told it v_x = 1 so we decided to run a straight line calibration test. 
 
-We setup a 2m straight line, commanded the turtlebot to move at a certain v_x (w_z = 0) and timed how long it took to travel it. Assuming constant velocity, we could derive the actual velocity using this equation:
+We setup a 2m straight line, commanded the turtlebot to move at a certain v_x and timed how long it took to travel it. Assuming constant velocity, we could derive the actual velocity using this equation:
 
 v = d/t , where d = 2m and t = our timed result.
 
@@ -27,7 +27,7 @@ And the raw data can be seen here:
 
 ![](images/linearVel_rawData.png)
 
-As can be seen from the raw data, within the linear region, the commanded velocity and actual velocity are basically 1:1. So now we know that when we command a velocity to the turtlebot it is interpretting it in m/s.
+As can be seen from the raw data, within the linear region, the commanded velocity and actual velocity are basically 1:1. So now we know that when we command a velocity to the turtlebot it is interpretting it in m/s. This actually makes sense since the turtlebot motors have built-in encoders, so assuming you have the units right, if you command 0.1 m/s the motors should produce very close to 0.1 m/s- which they did.
 
 We now had an upper limit on our v_x and began doing the same calibration process for our w_z. We did a couple of runs which can be seen here:
 
@@ -56,8 +56,10 @@ The videos of each run can be seen here:
 
 As expected, slow and medium both traced a circle of 0.33m radius. Fast, created a bigger circle because the turtlebot motors could not produce the commanded velocities so our equation assumption broke down.
 
+P.S. we later found out we could check the maximum linear velocity and angular velocity on the Robotis website and their results match ours.
+
 # Square.py
 
 ## Analysis
 
-### Figures
+

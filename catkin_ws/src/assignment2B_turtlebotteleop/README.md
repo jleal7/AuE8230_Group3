@@ -11,21 +11,17 @@ We started by setting v_x and w_z to 1. This made a circle, as expected. We then
 
 We setup a 2m straight line, commanded the turtlebot to move at a certain v_x (w_z = 0) and timed how long it took to travel it. Assuming constant velocity, we could derive the actual velocity using this equation:
 
-v = d/t where d = 2m and t = our timed result.
+v = d/t , where d = 2m and t = our timed result.
 
 These were our results:
-
+<!-- Need this space so image and text won't be on same line -->
 ![](images/linearVel_linearANDsaturation.png)
 
-We began by setting our v_x to 1 and w_z to 1.
+The figure shows a clear saturation and linear region. As the results were coming out, we saw the linear region finished around 0.2 m/s so we tested more velocities near that command. We ultimately decided the top linear speed for the turtlebot is 0.2 m/s.
 
- should show image below
- <!-- Need this space so image and text won't be on same line -->
+The linear region can be seen here:
 
-
-### Figures
-
-
+![](images/linearVel_linearONLY.png)
 
 # Square.py
 

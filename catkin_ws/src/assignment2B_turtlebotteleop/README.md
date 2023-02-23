@@ -37,6 +37,16 @@ And the raw data can be seen here:
 
 ![](images/angularVel_rawData.png)
 
+But we stopped when we realized that having the independent maxes for linear velocity and angular velocity isn't very useful since we can't simoultaneously get both at the same time. For example if we command the turtlebot to move at 0.2 m/s then we ask it to turn at 2 rad/s, the motor at the outer wheel won't be able to accomplish this. This is because the outer wheel in a circle always has to move faster than the inner wheel. So if the turtlebot is already going at max linear speed, the outer wheel motor now can't speed up anymore to begin differential turning. So we would have to come up with combinations of v_x and w_z that combined did not exceed the outer wheel's max motor speed of 0.2 m/s.
+
+
+We settled on:
+*Slow: v_x = 0.1 and w_z = 0.333
+*Medium: v_x = 0.15 and w_z = 0.5
+*Fast: v_w = 0.2 and w_z = 0.66
+
+
+
 
 # Square.py
 

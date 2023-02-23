@@ -42,19 +42,19 @@ But we stopped when we realized that having the independent maxes for linear vel
 
 We settled on:
 
-*Slow: v_x = 0.1 and w_z = 0.333
+* Slow: v_x = 0.1 and w_z = 0.333
 
-*Medium: v_x = 0.15 and w_z = 0.5
+* Medium: v_x = 0.15 and w_z = 0.5
 
-*Fast: v_w = 0.2 and w_z = 0.66
+* Fast: v_w = 0.2 and w_z = 0.66
 
 The videos of each run can be seen here:
 
-*Slow: LINK!
+* Slow: LINK!
 
-*Medium: LINK!
+* Medium: LINK!
 
-*Fast: LINK!
+* Fast: LINK!
 
 As predicted, slow and medium both traced a circle of 0.33m radius. Fast, created a bigger circle because the turtlebot motors could not produce the commanded velocities so our equation assumption broke down. We don't know if the turtlebot tries to maintain the angular or linear velocity when one is maxed out but since our circle grew rather than shrank from medium to fast, we expecct it is trying to maintain the v_x at the cost of w_z. We don't know why that is.
 

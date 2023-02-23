@@ -50,11 +50,11 @@ We settled on:
 
 The videos of each run can be seen here:
 
-* Slow: LINK!
+* Slow: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Circle/Slow_circle_v_0.1_w_0.33.mp4)
 
-* Medium: LINK!
+* Medium:![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Circle/Medium_circle_v_0.3_w_1.mp4)
 
-* Fast: LINK!
+* Fast: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Circle/Fast_Circle.mp4)
 
 As predicted, slow and medium both traced a circle of 0.33m radius. Fast, created a bigger circle because the turtlebot motors could not produce the commanded velocities so our equation assumption broke down. We don't know if the turtlebot tries to maintain the angular or linear velocity when one is maxed out but since our circle grew rather than shrank from medium to fast, we expecct it is trying to maintain the v_x at the cost of w_z. We don't know why that is.
 
@@ -89,10 +89,10 @@ For the fast speed it had the maximum deviation as the angular speed was also hi
 
 The videos of each run can be seen here:
 
-* Slow: LINK!
+* Slow: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Square/Slow_square.mp4)
 
-* Medium: LINK!
+* Medium:![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Square/Medium_square.mp4)
 
-* Fast: LINK!
+* Fast: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Square/Fast_square_v_0.2.mp4)
 
 

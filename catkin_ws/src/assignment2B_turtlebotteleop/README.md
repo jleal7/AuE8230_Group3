@@ -85,6 +85,8 @@ Slow Speed - 65 seconds
 
 For the fast speed it had the maximum deviation as the angular speed was also high which led to misalignment while following the turn trajectory. To understand the motion of turtlebot in a different surface(Another friction Coefficient - Cd) we also ran the square in the carpet which had a variation in the trajectory comapred to the previous expreiment observation. This shows how the same code acts differently in Gazebo environment and real time.
 
+![](images/Square_FrictionGround)
+
 
 
 

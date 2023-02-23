@@ -27,6 +27,17 @@ And the raw data can be seen here:
 
 ![](images/linearVel_rawData.png)
 
+As can be seen from the raw data, within the linear region, the commanded velocity and actual velocity are basically 1:1. So now we know that when we command a velocity to the turtlebot it is interpretting it in m/s.
+
+We now had an upper limit on our v_x and began doing the same calibration process for our w_z. We did a couple of runs which can be seen here:
+
+![](images/angularVel_graph.png)
+
+And the raw data can be seen here:
+
+![](images/angularVel_rawData.png)
+
+
 # Square.py
 
 ## Analysis

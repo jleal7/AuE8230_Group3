@@ -87,6 +87,12 @@ For the fast speed it had the maximum deviation as the angular speed was also hi
 
 ![](images/Square_FrictionGround.jpeg)
 
+The videos of each run can be seen here:
 
+* Slow: LINK!
+
+* Medium: LINK!
+
+* Fast: LINK!
 
 

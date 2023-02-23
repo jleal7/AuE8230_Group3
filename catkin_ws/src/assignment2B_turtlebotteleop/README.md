@@ -43,7 +43,9 @@ But we stopped when we realized that having the independent maxes for linear vel
 We settled on:
 
 *Slow: v_x = 0.1 and w_z = 0.333
+
 *Medium: v_x = 0.15 and w_z = 0.5
+
 *Fast: v_w = 0.2 and w_z = 0.66
 
 The videos of each run can be seen here:

@@ -23,6 +23,10 @@ The linear region can be seen here:
 
 ![](images/linearVel_linearONLY.png)
 
+And the raw data can be seen here:
+
+![](images/linearVel_rawData.png)
+
 # Square.py
 
 ## Analysis

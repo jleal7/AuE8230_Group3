@@ -1,0 +1,33 @@
+<launch>
+
+  <!--whole "group" of code only runs if condition is true-->
+  <group if="$(eval arg('code') == 'circle')">
+    <!--Top speed of turtlebot is: 0.2 (testing)-->
+    <!--Can't set v to 0.2 or else in circle outer wheel won't be able to go faster than inner so will use 0.15-->
+    <!--Radius should be 0.33 m which videos shows that for slow and medium.-->
+    <!--Set default values for v_x and w_z. Slow = (vel = 0.1, w = 0.333). Med = (vel=0.15,w=0.5). Fast = (vel=0.2, w=0.66)-->
+    <arg name="v_x" default = "0.2"/>
+    <arg name="w_z" default = "0.66"/>
+    
+    <!--node I added to control turtlebot inside of Gazebo by using Python script-->
+    <node pkg="assignment2B_turtlebotteleop" type="circle.py" name="PythonScript">
+      <param name="v_x" value="$(arg v_x)"/>
+      <param name="w_z" value="$(arg w_z)"/>
+    </node>
+  </group>
+  
+  <group if="$(eval arg('code') == 'square')">
+    <!-- Will use same angular velocity for slow, med, fast. Linear velocity is slow = 0.05, med = 0.1, fast = 0.2.-->
+    <arg name="v_x" default = "0.1"/>
+    <arg name="w_z" default = "0.5"/>
+    
+    <!--node I added to control turtlebot inside of Gazebo by using Python script-->
+    <node pkg="assignment2B_turtlebotteleop" type="square.py" name="PythonScript">
+      <!--ALSO NEED TO CALL THE PARAMETERS YOU CREATED ABOVE HERE!!!-->
+      <param name="v_x" value="$(arg v_x)"/>
+      <param name="w_z" value="$(arg w_z)"/>
+    </node>
+  </group>
+  
+  
+</launch>

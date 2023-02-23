@@ -51,6 +51,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment1c_turtlebot3/scripts/square.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment2B_turtlebotteleop/CMakeLists.txt"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment2B_turtlebotteleop/package.xml"
+  "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment2B_turtlebotteleop/scripts/circle.py"
+  "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment2B_turtlebotteleop/scripts/square.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_autorace_2020/turtlebot3_autorace_2020/CMakeLists.txt"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_autorace_2020/turtlebot3_autorace_2020/package.xml"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_autorace_2020/turtlebot3_autorace_camera/CMakeLists.txt"

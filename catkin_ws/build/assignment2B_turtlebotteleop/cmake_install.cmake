@@ -52,3 +52,11 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/assignment2B_turtlebotteleop" TYPE FILE FILES "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment2B_turtlebotteleop/package.xml")
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/assignment2B_turtlebotteleop" TYPE PROGRAM FILES "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment2B_turtlebotteleop/catkin_generated/installspace/circle.py")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/assignment2B_turtlebotteleop" TYPE PROGRAM FILES "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment2B_turtlebotteleop/catkin_generated/installspace/square.py")
+endif()
+

@@ -1,7 +1,9 @@
 HOW TO RUN THE CODE -
 
 Firstly open a new terminal and execute the command "roscore"
+
 Make sure the python file created for the Task is converted into executable by tight clicking on the properties of the file. This option is available in the permissions tab.
+
 Then, open another terminal and type the command "rosrun assignment2B_turtlebotteleop move.launch code:=square" for running the square code.
 
 # Circle.py

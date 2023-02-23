@@ -41,12 +41,18 @@ But we stopped when we realized that having the independent maxes for linear vel
 
 
 We settled on:
+
 *Slow: v_x = 0.1 and w_z = 0.333
 *Medium: v_x = 0.15 and w_z = 0.5
 *Fast: v_w = 0.2 and w_z = 0.66
 
+The videos of each run can be seen here:
 
+*Slow: LINK!
+*Medium: LINK!
+*Fast: LINK!
 
+As expected, slow and medium both traced a circle of 0.33m radius. Fast, created a bigger circle because the turtlebot motors could not produce the commanded velocities so our equation assumption broke down.
 
 # Square.py
 

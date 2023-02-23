@@ -51,10 +51,12 @@ We settled on:
 The videos of each run can be seen here:
 
 *Slow: LINK!
+
 *Medium: LINK!
+
 *Fast: LINK!
 
-As expected, slow and medium both traced a circle of 0.33m radius. Fast, created a bigger circle because the turtlebot motors could not produce the commanded velocities so our equation assumption broke down. We don't know if the turtlebot tries to maintain the angular or linear velocity when one is maxed out but since our circle grew rather than shrank from medium to fast, we expecct it is trying to maintain the v_x at the cost of w_z. We don't know why that is.
+As predicted, slow and medium both traced a circle of 0.33m radius. Fast, created a bigger circle because the turtlebot motors could not produce the commanded velocities so our equation assumption broke down. We don't know if the turtlebot tries to maintain the angular or linear velocity when one is maxed out but since our circle grew rather than shrank from medium to fast, we expecct it is trying to maintain the v_x at the cost of w_z. We don't know why that is.
 
 P.S. we later found out we could check the maximum linear velocity and angular velocity on the Robotis website and their results match ours.
 

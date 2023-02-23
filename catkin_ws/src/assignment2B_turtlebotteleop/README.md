@@ -2,7 +2,7 @@
 
 ## Analysis
  should show image below
-!(images/linearVel_linearANDsaturation.png)
+![](images/linearVel_linearANDsaturation.png)
 
 ### Figures
 

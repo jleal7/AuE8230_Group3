@@ -64,4 +64,27 @@ P.S. we later found out we could check the maximum linear velocity and angular v
 
 ## Analysis
 
+The analysis for circle.py for longituidnal motion holds good for square.py also.
+![](images/Longituidnal_Speed_Analysis.png)
+
+For sqaure open loop control, we created a square setup in the ground for understanding the turtbot behaviour if itrs following the desired trajectory.
+![](images/sqaure_setup.png)
+
+The sqaure setup was ran for 3 different velocities - 
+1. Slow (0.05 m/s)
+2. Medium  (0.1 m/s)
+3. Fast  (0.2 m/s)
+
+Observations:
+ The slow and medium maintained their trajectory , the slow one was the best but the medium speed deviated after the second turn and the error compounded in the third turn.
+ 
+Analysis based on the Time Taken by turtlebot to maneuver square trajectory-
+Fast Speed - 36 seconds
+Medium Speed - 46 seconds
+Slow Speed - 65 seconds
+
+For the fast speed it had the maximum deviation as the angular speed was also high which led to misalignment while following the turn trajectory. To understand the motion of turtlebot in a different surface(Another friction Coefficient - Cd) we also ran the square in the carpet which had a variation in the trajectory comapred to the previous expreiment observation. This shows how the same code acts differently in Gazebo environment and real time.
+
+
+
 

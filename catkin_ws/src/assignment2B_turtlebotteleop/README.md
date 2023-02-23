@@ -68,7 +68,7 @@ The analysis for circle.py for longituidnal motion holds good for square.py also
 ![](images/Longituidnal_Speed_Analysis.png)
 
 For sqaure open loop control, we created a square setup in the ground for understanding the turtbot behaviour if itrs following the desired trajectory.
-![](images/sqaure_setup.png)
+![](images/sqaure_setup.jpeg)
 
 The sqaure setup was ran for 3 different velocities - 
 1. Slow (0.05 m/s)

@@ -16,7 +16,7 @@ def square_straight1():
     t0 = rospy.Time.now().to_sec() # current time before startinh the manouver
     
     #first straight
-    while(current_distance <= 0.5):
+    while(current_distance <= 1.1):
 
       
        
@@ -59,7 +59,7 @@ def square_straight1():
     
     current_distance = 0
     t0 = rospy.Time.now().to_sec() 
-    while(current_distance <= 1):
+    while(current_distance <= 1.1):
 
       
        
@@ -106,7 +106,7 @@ def square_straight1():
     
     current_distance = 0
     t0 = rospy.Time.now().to_sec() 
-    while(current_distance <= 1):
+    while(current_distance <= 1.1):
 
       
        
@@ -152,7 +152,7 @@ def square_straight1():
     #4th Straight
     current_distance = 0
     t0 = rospy.Time.now().to_sec() 
-    while(current_distance <= 1):
+    while(current_distance <= 1.1):
 
       
        

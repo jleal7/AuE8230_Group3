@@ -1,3 +1,13 @@
+HOW TO RUN THE CODE -
+
+Firstly open a new terminal and execute the command "roscore"
+
+Make sure the python file created for the Task is converted into executable by tight clicking on the properties of the file. This option is available in the permissions tab.
+
+ The Launch file is a replica of launch file used for assignment 1C but the only change is we removed the launching of gazebo world from the launch script.
+
+Then, open another terminal and type the command "rosrun assignment2B_turtlebotteleop move.launch code:=square" for running the square code.
+
 # Circle.py
 
 ## Analysis
@@ -50,11 +60,11 @@ We settled on:
 
 The videos of each run can be seen here:
 
-* Slow: ![](videos/circle/slow.mp4)
+* Slow: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Circle/Slow_circle_v_0.1_w_0.33.mp4)
 
-* Medium: ![](videos/circle/medium.mp4)
+* Medium:![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Circle/Medium_circle_v_0.3_w_1.mp4)
 
-* Fast: ![](videos/circle/fast.mp4)
+* Fast: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Circle/Fast_Circle.mp4)
 
 As predicted, slow and medium both traced a circle of 0.33m radius. Fast, created a bigger circle because the turtlebot motors could not produce the commanded velocities so our equation assumption broke down. We don't know if the turtlebot tries to maintain the angular or linear velocity when one is maxed out but since our circle grew rather than shrank from medium to fast, we expecct it is trying to maintain the v_x at the cost of w_z. We don't know why that is.
 
@@ -63,5 +73,36 @@ P.S. we later found out we could check the maximum linear velocity and angular v
 # Square.py
 
 ## Analysis
+
+The analysis for circle.py for longituidnal motion holds good for square.py also.
+![](images/Longituidnal_Speed_Analysis.png)
+
+For sqaure open loop control, we created a square setup in the ground for understanding the turtbot behaviour if itrs following the desired trajectory.
+![](images/sqaure_setup.jpeg)
+
+The sqaure setup was ran for 3 different velocities - 
+1. Slow (0.05 m/s)
+2. Medium  (0.1 m/s)
+3. Fast  (0.2 m/s)
+
+Observations:
+ The slow and medium maintained their trajectory , the slow one was the best but the medium speed deviated after the second turn and the error compounded in the third turn.
+ 
+Analysis based on the Time Taken by turtlebot to maneuver square trajectory-
+Fast Speed - 36 seconds
+Medium Speed - 46 seconds
+Slow Speed - 65 seconds
+
+For the fast speed it had the maximum deviation as the angular speed was also high which led to misalignment while following the turn trajectory. To understand the motion of turtlebot in a different surface(Another friction Coefficient - Cd) we also ran the square in the carpet which had a variation in the trajectory comapred to the previous expreiment observation. This shows how the same code acts differently in Gazebo environment and real time.
+
+![](images/Square_FrictionGround.jpeg)
+
+The videos of each run can be seen here:
+
+* Slow: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Square/Slow_square.mp4)
+
+* Medium:![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Square/Medium_square.mp4)
+
+* Fast: ![Link](https://github.com/jleal7/AuE8230_Group3/tree/main/catkin_ws/src/assignment2B_turtlebotteleop/videos/Square/Fast_square_v_0.2.mp4)
 
 

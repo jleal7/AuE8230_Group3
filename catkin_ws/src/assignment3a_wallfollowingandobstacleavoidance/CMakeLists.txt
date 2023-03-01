@@ -108,6 +108,10 @@ catkin_package(
 #  CATKIN_DEPENDS rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
 )
+catkin_install_python(PROGRAMS scripts/wallFollow.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 
 ###########
 ## Build ##

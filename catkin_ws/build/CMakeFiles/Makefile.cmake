@@ -57,6 +57,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment2B_turtlebotteleop/scripts/square.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment3a_wallfollowingandobstacleavoidance/CMakeLists.txt"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment3a_wallfollowingandobstacleavoidance/package.xml"
+  "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment3a_wallfollowingandobstacleavoidance/scripts/wallFollow.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_autorace_2020/turtlebot3_autorace_2020/CMakeLists.txt"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_autorace_2020/turtlebot3_autorace_2020/package.xml"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/turtlebot3_autorace_2020/turtlebot3_autorace_camera/CMakeLists.txt"

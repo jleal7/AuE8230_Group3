@@ -14,3 +14,5 @@ Launch file consists of 5 sections:
 3. Load xacro file for turtlebot3 burger
 4. Launch first node which is gazebo simulator with our chosen world
 5. Launch second node which is the python script to control the turtlebot
+
+NOTE: Odd that gazebo calculated a different trajectory for the turtlebot when screen was being recorded vs not.

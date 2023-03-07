@@ -23,10 +23,12 @@ For this the scan data from the Lidar has to be used to sense the obstacles and 
 The 1st part includes the logic which is taken from the hint in the question itself, but instead of segregating the zones into multiple angle instances and taking the average and comparing them to the the orientation, the zones were converted into segments of 4-6 and each segment value was used individually to obtain the obstacles nearby and rotate based on the fixed distance or safe distance, which was set as 0.5
 If the front distance > 0.5 then the bot can continue straight, the same applies for left and right. 
 This process continues as the bot traverses around the entire map.
+![](images/Task2_1.png)
 
 Steps to launch:
-1. As all the parameters are preset, and it is a standalone code, just the Launch file has to be run.
-2. Rosrun 
+1. As all the parameters are preset, and it is a standalone code, just the Launch file - T2 has to be run.
+
+![](images/Task2_2.png)
 
 # Part 3 - Obstacle Avoidance - Actual Turtlebot
 

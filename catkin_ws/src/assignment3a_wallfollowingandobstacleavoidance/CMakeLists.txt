@@ -111,6 +111,9 @@ catkin_package(
 catkin_install_python(PROGRAMS scripts/wallFollow.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+catkin_install_python(PROGRAMS scripts/wander.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 
 ###########

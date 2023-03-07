@@ -1,0 +1,10 @@
+<launch>
+
+  <!--whole "group" of code only runs if condition is true-->
+
+  <!--node I added to control turtlebot inside of Gazebo by using Python script-->
+  <node pkg="assignment3a_wallfollowingandobstacleavoidance" type="wander.py" name="PythonScript">
+  </node>
+  
+  
+</launch>

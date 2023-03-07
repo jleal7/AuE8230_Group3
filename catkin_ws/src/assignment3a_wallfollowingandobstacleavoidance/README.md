@@ -30,6 +30,10 @@ Steps to launch:
 
 ![](images/Task2_2.png)
 
+## Execute Launch File
+
+roslaunch assignment3a_wallfollowingandobstacleavoidance assignment3a_turtlebot3_T2.launch --screen
+
 # Part 3 - Obstacle Avoidance - Actual Turtlebot
 
 Setup - As instructed we setup a few obstacles on the 4th floor CGEC for the actual run of the obstacle avoidance. 
@@ -38,6 +42,10 @@ Issues: Unlike gazebo /scan where the lidar returned inf value when it exceeded 
 A find function was implemented to parse the 0 values and set it to some set value = 20, but that also did not seem to work.
 This can be seen in the videos uploaded to the videos folder (4 runs uploaded)
 
+## Execute Launch File
+
+roslaunch assignment3a_wallfollowingandobstacleavoidance wander.launch --screen
+
 # Part 4 - Emergency Braking
 
 For this task, it uses a similar logic as the obstacle avoidance part, hence with a slight change to the code, the emergency braking maneuver could be performed.
@@ -45,3 +53,7 @@ The set limit or threshold was set and the vel.linear.x was set to 0 as the deit
 
 Steps to launch:
 1. As all the parameters are preset, and it is a standalone code, just run the Launch file - assignment3a_turtlebot3_T4.launch 
+
+## Execute Launch File
+
+roslaunch assignment3a_wallfollowingandobstacleavoidance assignment3a_turtlebot3_T4.launch --screen

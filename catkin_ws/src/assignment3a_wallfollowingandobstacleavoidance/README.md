@@ -22,11 +22,11 @@ NOTE: Odd that gazebo calculated a different trajectory for the turtlebot when s
 For this the scan data from the Lidar has to be used to sense the obstacles and take evasive maneuvers to avoid it.
 The 1st part includes the logic which is taken from the hint in the question itself, but instead of segregating the zones into multiple angle instances and taking the average and comparing them to the the orientation, the zones were converted into segments of 4-6 and each segment value was used individually to obtain the obstacles nearby and rotate based on the fixed distance or safe distance, which was set as 0.5
 If the front distance > 0.5 then the bot can continue straight, the same applies for left and right. 
-This process continues as the bot traverses around the entire map.
+This process continues as the bot traverses around the entire map. The turtlebot3_obstacles.world was used as shown below:
 ![](images/Task2_1.png)
 
 Steps to launch:
-1. As all the parameters are preset, and it is a standalone code, just the Launch file - T2 has to be run.
+1. As all the parameters are preset, and it is a standalone code, just run the Launch file - assignment3a_turtlebot3_T2.launch 
 
 ![](images/Task2_2.png)
 
@@ -42,3 +42,6 @@ This can be seen in the videos uploaded to the videos folder (4 runs uploaded)
 
 For this task, it uses a similar logic as the obstacle avoidance part, hence with a slight change to the code, the emergency braking maneuver could be performed.
 The set limit or threshold was set and the vel.linear.x was set to 0 as the deitance or /scan data went below the threshold (dist).
+
+Steps to launch:
+1. As all the parameters are preset, and it is a standalone code, just run the Launch file - assignment3a_turtlebot3_T4.launch 

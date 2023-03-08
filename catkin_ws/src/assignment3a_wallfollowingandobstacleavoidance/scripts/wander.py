@@ -10,8 +10,8 @@ from sensor_msgs.msg import LaserScan
 #def __init__(self):
         
 #initializing the node
-ind2 =[]  
 
+inds2 = [];
 def callback(msg):
 
         #inds = np.where(msg.ranges == 0.0)[0]
@@ -62,6 +62,7 @@ def callback(msg):
 
 
         dist = 0.1
+
         if front > dist and front_left > dist and front_right > dist:
           vel.linear.x=0.5
           vel.linear.y=0
@@ -97,7 +98,8 @@ def callback(msg):
           vel.angular.x = 0
           vel.angular.y = 0
           vel.angular.z = 0.2
-        #pub.publish(vel)
+
+        pub.publish(vel)
 
 vel = Twist()
 rospy.init_node('obstacle_avoidance', anonymous=True)     

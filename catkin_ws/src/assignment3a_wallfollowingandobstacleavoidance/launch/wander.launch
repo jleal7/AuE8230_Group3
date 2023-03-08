@@ -1,0 +1,16 @@
+<launch>
+
+  <!--whole "group" of code only runs if condition is true-->
+  <!--Top speed of turtlebot is: 0.2 (testing)-->
+  <!--Can't set v to 0.2 or else in circle outer wheel won't be able to go faster than inner so will use 0.15-->
+  
+  <!--Radius should be 0.33 m which videos shows that for slow and medium.-->
+  <!--Set default values for v_x and w_z. Slow = (vel = 0.1, w = 0.333). Med = (vel=0.15,w=0.5). Fast = (vel=0.2, w=0.66)-->
+  <arg name="v_x" default = "0.2"/>
+  <arg name="w_z" default = "0.66"/>
+  
+  <!--node I added to control turtlebot inside of Gazebo by using Python script-->
+  <node pkg="assignment3a_wallfollowingandobstacleavoidance" type="wander.py" name="PythonScript">
+  </node>
+  
+</launch>

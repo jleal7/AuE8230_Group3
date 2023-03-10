@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import numpy as np
 import rospy
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
@@ -9,9 +10,18 @@ from sensor_msgs.msg import LaserScan
 #def __init__(self):
         
 #initializing the node
-  
 
+inds2 = [];
 def callback(msg):
+
+        #inds = np.where(msg.ranges == 0.0)[0]
+        for i in range(len(msg.ranges)):
+            if msg.ranges[i] == 0.0:
+                ind2.append(msg.ranges[i])
+
+        print(inds)
+        #msg.ranges[inds] = 20
+        msg.ranges[ind2] = 20
         
         print('Range at 0 degress: {}'.format(msg.ranges[0]))
         print('Range at 30 degress: {}'.format(msg.ranges[30]))
@@ -51,7 +61,8 @@ def callback(msg):
         right_avg = (right + right_top + right_bottom)/3
 
 
-        dist = 0.5
+        dist = 0.1
+
         if front > dist and front_left > dist and front_right > dist:
           vel.linear.x=0.5
           vel.linear.y=0
@@ -87,6 +98,7 @@ def callback(msg):
           vel.angular.x = 0
           vel.angular.y = 0
           vel.angular.z = 0.2
+
         pub.publish(vel)
 
 vel = Twist()

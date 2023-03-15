@@ -119,6 +119,13 @@
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment3a_wallfollowingandobstacleavoidance/CMakeFiles/rebuild_cache.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment3a_wallfollowingandobstacleavoidance/CMakeFiles/edit_cache.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment3a_wallfollowingandobstacleavoidance/CMakeFiles/test.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/install/strip.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/install/local.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/install.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/list_install_components.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/rebuild_cache.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/edit_cache.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/test.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/turtlebot3_autorace_2020/turtlebot3_autorace_camera/CMakeFiles/install/strip.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/turtlebot3_autorace_2020/turtlebot3_autorace_camera/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/turtlebot3_autorace_2020/turtlebot3_autorace_camera/CMakeFiles/dynamic_reconfigure_generate_messages_py.dir

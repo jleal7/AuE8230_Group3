@@ -62,6 +62,7 @@ all: turtlebot3_autorace_2020/turtlebot3_autorace_driving/all
 all: turtlebot3_simulations/turtlebot3_simulations/all
 all: assignment1c_turtlebot3/all
 all: assignment3a_wallfollowingandobstacleavoidance/all
+all: assignment4_trackingandfollowing/all
 all: turtlebot3_autorace_2020/turtlebot3_autorace_camera/all
 all: turtlebot3_autorace_2020/turtlebot3_autorace_detect/all
 all: turtlebot3_simulations/turtlebot3_fake/all
@@ -79,6 +80,7 @@ preinstall: turtlebot3_autorace_2020/turtlebot3_autorace_driving/preinstall
 preinstall: turtlebot3_simulations/turtlebot3_simulations/preinstall
 preinstall: assignment1c_turtlebot3/preinstall
 preinstall: assignment3a_wallfollowingandobstacleavoidance/preinstall
+preinstall: assignment4_trackingandfollowing/preinstall
 preinstall: turtlebot3_autorace_2020/turtlebot3_autorace_camera/preinstall
 preinstall: turtlebot3_autorace_2020/turtlebot3_autorace_detect/preinstall
 preinstall: turtlebot3_simulations/turtlebot3_fake/preinstall
@@ -101,6 +103,7 @@ clean: turtlebot3_autorace_2020/turtlebot3_autorace_driving/clean
 clean: turtlebot3_simulations/turtlebot3_simulations/clean
 clean: assignment1c_turtlebot3/clean
 clean: assignment3a_wallfollowingandobstacleavoidance/clean
+clean: assignment4_trackingandfollowing/clean
 clean: turtlebot3_autorace_2020/turtlebot3_autorace_camera/clean
 clean: turtlebot3_autorace_2020/turtlebot3_autorace_detect/clean
 clean: turtlebot3_simulations/turtlebot3_fake/clean
@@ -174,6 +177,24 @@ assignment3a_wallfollowingandobstacleavoidance/preinstall:
 assignment3a_wallfollowingandobstacleavoidance/clean:
 
 .PHONY : assignment3a_wallfollowingandobstacleavoidance/clean
+
+#=============================================================================
+# Directory level rules for directory assignment4_trackingandfollowing
+
+# Recursive "all" directory target.
+assignment4_trackingandfollowing/all:
+
+.PHONY : assignment4_trackingandfollowing/all
+
+# Recursive "preinstall" directory target.
+assignment4_trackingandfollowing/preinstall:
+
+.PHONY : assignment4_trackingandfollowing/preinstall
+
+# Recursive "clean" directory target.
+assignment4_trackingandfollowing/clean:
+
+.PHONY : assignment4_trackingandfollowing/clean
 
 #=============================================================================
 # Directory level rules for directory gtest

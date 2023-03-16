@@ -45,25 +45,40 @@ This can be seen in the videos uploaded to the videos folder (4 runs uploaded)
 Readings after running the Gazebo code:
 
 Range at 0 degress: 0.5839999914169312
+
 Range at 30 degress: 0.0
+
 Range at 330 degress: 0.0
+
 Range at 90 degress: 0.0
+
 Range at 60 degress: 3.8510000705718994
+
 Range at 120 degress: 0.0
+
 Range at 270 degress: 2.7739999294281006
+
 Range at 300 degress: 0.0
+
 Range at 240 degress: 0.0
 
 Problem: The lidar returned readings of 0 for anything outside the range.
 
 Fix: 
        front = msg.ranges[0]
+       
         #front1 = msg.ranges[15]
+        
         #front2 = msg.ranges[44]
+        
         front_left = msg.ranges[30]
+        
         #front_right1 = msg.ranges[345]
+        
         front_right = msg.ranges[330]
+        
         #front_right2 = msg.ranges[314]
+        
 
         if front==0:
            front = 20
@@ -80,13 +95,21 @@ Now the readings were assigned an arbritrary value above the Lidars max (= 20), 
 New readings after update:
 
 front 0 deg: 0.546999990940094
+
 front_left 30 deg: 2.3499999046325684
+
 front_right 330 deg: 20
+
 left 90 deg: 0.27399998903274536
+
 left_top 60 deg: 0.6919999718666077
+
 left_bottom 105 deg: 20
+
 right 270 degress: 3.7049999237060547
+
 right_top 90 deg: 20
+
 right_bottom 90 deg: 20
 
 ## Execute Launch File

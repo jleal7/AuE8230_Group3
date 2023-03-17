@@ -8,6 +8,7 @@ project(assignment4_trackingandfollowing)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
   rospy
   sensor_msgs
   std_msgs
@@ -105,11 +106,8 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES assignment4_trackingandfollowing
-#  CATKIN_DEPENDS rospy sensor_msgs std_msgs
+#  CATKIN_DEPENDS cv_bridge rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
-)
-catkin_install_python(PROGRAMS scripts/laneTrack_gazebo.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 ###########

@@ -5,7 +5,7 @@ import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
-#could not get import move_robot to work so just pasted in here
+#could not get import move_robot to work so just pasted in this file
 
 rospy.init_node('line_following_node', anonymous=True)
 
@@ -19,7 +19,7 @@ class MoveTurtlebot3(object):
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.cmd_vel_subs = rospy.Subscriber('/cmd_vel', Twist, self.cmdvel_callback)
         self.last_cmdvel_command = Twist()
-        self._cmdvel_pub_rate = rospy.Rate(10)
+        self._cmdvel_pub_rate = rospy.Rate(40) #publishing to cmd_vel 50 times per second. 10 Hz was creating too much weaving
 
     def cmdvel_callback(self,msg):
         self.last_cmdvel_command = msg
@@ -85,11 +85,19 @@ class LineFollower(object):
 
         # Calculate centroid of the blob of binary image using ImageMoments
         m = cv2.moments(mask, False)
+        
+        foundLine = True #assume true at start and if division by 0 occurs make it false
 
         try:
             cx, cy = m['m10']/m['m00'], m['m01']/m['m00']
         except ZeroDivisionError:
             cx, cy = width/2, height/2
+            foundLine = False
+            
+        if foundLine == True:
+            print("Line Found!")
+        else:
+            print("Looking for line")
         
         # Draw the centroid in the resultut image
         # cv2.circle(img, center, radius, color[, thickness[, lineType[, shift]]]) 
@@ -100,17 +108,20 @@ class LineFollower(object):
 
         #################################
         ###   ENTER CONTROLLER HERE   ###
-        tolerance = 0
-        if cx > width/2+tolerance:
-            twist_object.linear.x = 0
-            twist_object.angular.z = -0.2
-        elif cx < width/2-tolerance:
-            twist_object.linear.x = 0
-            twist_object.angular.z = 0.2
+        
+        if foundLine == True:
+            tolerance = 30
+            if cx > width/2+tolerance:
+                twist_object.linear.x = 0
+                twist_object.angular.z = -0.2
+            elif cx < width/2-tolerance:
+                twist_object.linear.x = 0
+                twist_object.angular.z = 0.2
+            else:
+                twist_object.linear.x = 0.15
+                twist_object.angular.z = 0
         else:
-            #twist_object.linear.x = 0.3
-            #twist_object.angular.z = 0
-            pass
+            twist_object.angular.z = 0.2
             
         print("cx = %f. mid = %f" % (cx,width/2))
         #################################
@@ -132,7 +143,7 @@ def main():
     
     #creates a cv bridge, subscribes to camera and creates a MoveTurtlebot3 object
     line_follower_object = LineFollower()
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(40) #read from lidar 10 times per second
     
     ctrl_c = False
     def shutdownhook():

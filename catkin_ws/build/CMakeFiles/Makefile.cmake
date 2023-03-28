@@ -75,6 +75,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing/CMakeLists.txt"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing/package.xml"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing/scripts/LineTrack_gazebo.py"
+  "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing/scripts/LineTrack_real.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing/scripts/follow_line_step_hsv.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing/scripts/line_follower_basics.py"
   "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing/scripts/move_robot.py"

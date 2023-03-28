@@ -121,6 +121,9 @@ catkin_install_python(PROGRAMS scripts/line_follower_basics.py
 catkin_install_python(PROGRAMS scripts/move_robot.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+catkin_install_python(PROGRAMS scripts/LineTrack_real.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ###########
 ## Build ##

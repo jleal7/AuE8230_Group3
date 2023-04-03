@@ -5,7 +5,6 @@ import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
-#could not get import move_robot to work so just pasted in this file
 
 rospy.init_node('line_following_node', anonymous=True)
 
@@ -58,7 +57,7 @@ class LineFollower(object):
 
     def __init__(self):
         self.bridge_object = CvBridge()
-        self.image_sub = rospy.Subscriber("/camera/rgb/image_raw",Image,self.camera_callback)
+        self.image_sub = rospy.Subscriber("/camera/image",Image,self.camera_callback)
 
     def camera_callback(self, data):
         # We select bgr8 because its the OpneCV encoding by default
@@ -78,9 +77,10 @@ class LineFollower(object):
         To know which color to track in HSV use ColorZilla to get the color registered by the camera in BGR and convert to HSV. 
         """
 
-        # Threshold the HSV image to get only yellow colors
-        lower_yellow = np.array([20,100,100])
-        upper_yellow = np.array([50,255,255])
+        # Threshold the HSV image to get only white
+        #HSV = 10 deg, 2.7% sat and 87.1% value
+        lower_yellow = np.array([0,0,190])
+        upper_yellow = np.array([20,15,255])
         mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
         # Calculate centroid of the blob of binary image using ImageMoments
@@ -94,10 +94,6 @@ class LineFollower(object):
             cx, cy = width/2, height/2
             foundLine = False
             
-        if foundLine == True:
-            print("Line Found!")
-        else:
-            print("Looking for line")
         
         # Draw the centroid in the resultut image
         # cv2.circle(img, center, radius, color[, thickness[, lineType[, shift]]]) 
@@ -110,18 +106,20 @@ class LineFollower(object):
         ###   ENTER CONTROLLER HERE   ###
         
         if foundLine == True:
+            print("Line Found!")
             tolerance = 30
             if cx > width/2+tolerance:
                 twist_object.linear.x = 0
-                twist_object.angular.z = -0.2
+                twist_object.angular.z = -0.1
             elif cx < width/2-tolerance:
                 twist_object.linear.x = 0
-                twist_object.angular.z = 0.2
+                twist_object.angular.z = 0.1
             else:
-                twist_object.linear.x = 0.15
+                twist_object.linear.x = 0.05
                 twist_object.angular.z = 0
         else:
-            twist_object.angular.z = 0.2
+            print("Looking for line")
+            twist_object.angular.z = 0.1
             
         print("cx = %f. mid = %f" % (cx,width/2))
         #################################
@@ -139,11 +137,11 @@ class LineFollower(object):
 def main():
     
     #initial Twist message is all zeros to make it turn to start off with
-    twist_object.angular.z = 0.2
+    twist_object.angular.z = 0.1
     
     #creates a cv bridge, subscribes to camera and creates a MoveTurtlebot3 object
     line_follower_object = LineFollower()
-    rate = rospy.Rate(40) #read from lidar 10 times per second
+    rate = rospy.Rate(40) #read from lidar 40 times per second
     
     ctrl_c = False
     def shutdownhook():

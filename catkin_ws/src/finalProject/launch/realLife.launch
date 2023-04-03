@@ -1,0 +1,7 @@
+<launch>
+
+  <!--node I added to control turtlebot inside of Gazebo by using Python script-->
+  <node pkg="finalProject" type="wallFollow.py" name="PythonScript">
+  </node>
+  
+</launch>

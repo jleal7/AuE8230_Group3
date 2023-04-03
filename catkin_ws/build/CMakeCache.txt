@@ -808,6 +808,12 @@ assignment4_trackingandfollowing_BINARY_DIR:STATIC=/home/jairo/Desktop/AuE8230_G
 //Value Computed by CMake
 assignment4_trackingandfollowing_SOURCE_DIR:STATIC=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/assignment4_trackingandfollowing
 
+//Value Computed by CMake
+aue_finals_BINARY_DIR:STATIC=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals
+
+//Value Computed by CMake
+aue_finals_SOURCE_DIR:STATIC=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/auefinals/aue_finals
+
 //The directory containing a CMake configuration file for boost_atomic.
 boost_atomic_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.71.0
 
@@ -864,6 +870,12 @@ cv_bridge_boost_LIB_DEPENDS:STATIC=general;Boost::python;general;/opt/ros/noetic
 
 //The directory containing a CMake configuration file for dynamic_reconfigure.
 dynamic_reconfigure_DIR:PATH=/opt/ros/noetic/share/dynamic_reconfigure/cmake
+
+//Value Computed by CMake
+finalProject_BINARY_DIR:STATIC=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject
+
+//Value Computed by CMake
+finalProject_SOURCE_DIR:STATIC=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/src/finalProject
 
 //The directory containing a CMake configuration file for gazebo.
 gazebo_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/gazebo
@@ -1372,7 +1384,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=25
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=27
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

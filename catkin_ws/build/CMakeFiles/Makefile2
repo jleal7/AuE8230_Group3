@@ -54,6 +54,7 @@ CMAKE_BINARY_DIR = /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build
 
 # The main recursive "all" target.
 all: gtest/all
+all: auefinals/aue_finals/all
 all: vision_opencv/opencv_tests/all
 all: assignment2B_turtlebotteleop/all
 all: turtlebot3_autorace_2020/turtlebot3_autorace_2020/all
@@ -66,6 +67,7 @@ all: assignment1c_turtlebot3/all
 all: assignment3a_wallfollowingandobstacleavoidance/all
 all: vision_opencv/cv_bridge/all
 all: assignment4_trackingandfollowing/all
+all: finalProject/all
 all: vision_opencv/image_geometry/all
 all: turtlebot3_autorace_2020/turtlebot3_autorace_camera/all
 all: turtlebot3_autorace_2020/turtlebot3_autorace_detect/all
@@ -76,6 +78,7 @@ all: turtlebot3_simulations/turtlebot3_gazebo/all
 
 # The main recursive "preinstall" target.
 preinstall: gtest/preinstall
+preinstall: auefinals/aue_finals/preinstall
 preinstall: vision_opencv/opencv_tests/preinstall
 preinstall: assignment2B_turtlebotteleop/preinstall
 preinstall: turtlebot3_autorace_2020/turtlebot3_autorace_2020/preinstall
@@ -88,6 +91,7 @@ preinstall: assignment1c_turtlebot3/preinstall
 preinstall: assignment3a_wallfollowingandobstacleavoidance/preinstall
 preinstall: vision_opencv/cv_bridge/preinstall
 preinstall: assignment4_trackingandfollowing/preinstall
+preinstall: finalProject/preinstall
 preinstall: vision_opencv/image_geometry/preinstall
 preinstall: turtlebot3_autorace_2020/turtlebot3_autorace_camera/preinstall
 preinstall: turtlebot3_autorace_2020/turtlebot3_autorace_detect/preinstall
@@ -103,6 +107,7 @@ clean: CMakeFiles/clean_test_results.dir/clean
 clean: CMakeFiles/tests.dir/clean
 clean: CMakeFiles/download_extra_data.dir/clean
 clean: gtest/clean
+clean: auefinals/aue_finals/clean
 clean: vision_opencv/opencv_tests/clean
 clean: assignment2B_turtlebotteleop/clean
 clean: turtlebot3_autorace_2020/turtlebot3_autorace_2020/clean
@@ -115,6 +120,7 @@ clean: assignment1c_turtlebot3/clean
 clean: assignment3a_wallfollowingandobstacleavoidance/clean
 clean: vision_opencv/cv_bridge/clean
 clean: assignment4_trackingandfollowing/clean
+clean: finalProject/clean
 clean: vision_opencv/image_geometry/clean
 clean: turtlebot3_autorace_2020/turtlebot3_autorace_camera/clean
 clean: turtlebot3_autorace_2020/turtlebot3_autorace_detect/clean
@@ -207,6 +213,42 @@ assignment4_trackingandfollowing/preinstall:
 assignment4_trackingandfollowing/clean:
 
 .PHONY : assignment4_trackingandfollowing/clean
+
+#=============================================================================
+# Directory level rules for directory auefinals/aue_finals
+
+# Recursive "all" directory target.
+auefinals/aue_finals/all:
+
+.PHONY : auefinals/aue_finals/all
+
+# Recursive "preinstall" directory target.
+auefinals/aue_finals/preinstall:
+
+.PHONY : auefinals/aue_finals/preinstall
+
+# Recursive "clean" directory target.
+auefinals/aue_finals/clean: auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/clean
+
+.PHONY : auefinals/aue_finals/clean
+
+#=============================================================================
+# Directory level rules for directory finalProject
+
+# Recursive "all" directory target.
+finalProject/all:
+
+.PHONY : finalProject/all
+
+# Recursive "preinstall" directory target.
+finalProject/preinstall:
+
+.PHONY : finalProject/preinstall
+
+# Recursive "clean" directory target.
+finalProject/clean:
+
+.PHONY : finalProject/clean
 
 #=============================================================================
 # Directory level rules for directory gtest
@@ -661,7 +703,7 @@ vision_opencv/opencv_tests/preinstall:
 .PHONY : vision_opencv/opencv_tests/preinstall
 
 # Recursive "clean" directory target.
-vision_opencv/opencv_tests/clean: vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/clean
+vision_opencv/opencv_tests/clean:
 
 .PHONY : vision_opencv/opencv_tests/clean
 
@@ -931,31 +973,31 @@ gtest/googletest/CMakeFiles/gtest.dir/clean:
 .PHONY : gtest/googletest/CMakeFiles/gtest.dir/clean
 
 #=============================================================================
-# Target rules for target vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir
+# Target rules for target auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir
 
 # All Build rule for target.
-vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/all:
-	$(MAKE) -f vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/build.make vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/depend
-	$(MAKE) -f vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/build.make vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/build
+auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/all:
+	$(MAKE) -f auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/build.make auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/depend
+	$(MAKE) -f auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/build.make auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/CMakeFiles --progress-num= "Built target _catkin_empty_exported_target"
-.PHONY : vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/all
+.PHONY : auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/all
 
 # Build rule for subdir invocation for target.
-vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/rule: cmake_check_build_system
+auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/CMakeFiles 0
-.PHONY : vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/rule
+.PHONY : auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/rule
 
 # Convenience name for target.
-_catkin_empty_exported_target: vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/rule
+_catkin_empty_exported_target: auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/rule
 
 .PHONY : _catkin_empty_exported_target
 
 # clean rule for target.
-vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/clean:
-	$(MAKE) -f vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/build.make vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/clean
-.PHONY : vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir/clean
+auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/clean:
+	$(MAKE) -f auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/build.make auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/clean
+.PHONY : auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir/clean
 
 #=============================================================================
 # Target rules for target assignment2B_turtlebotteleop/CMakeFiles/std_msgs_generate_messages_py.dir

@@ -35,6 +35,14 @@
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/gtest/googletest/CMakeFiles/test.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/gtest/googletest/CMakeFiles/gtest_main.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/gtest/googletest/CMakeFiles/gtest.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/install/strip.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/install/local.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/install.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/list_install_components.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/rebuild_cache.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/edit_cache.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/test.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/auefinals/aue_finals/CMakeFiles/_catkin_empty_exported_target.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/opencv_tests/CMakeFiles/install/strip.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/opencv_tests/CMakeFiles/install/local.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/opencv_tests/CMakeFiles/install.dir
@@ -42,7 +50,6 @@
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/opencv_tests/CMakeFiles/rebuild_cache.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/opencv_tests/CMakeFiles/edit_cache.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/opencv_tests/CMakeFiles/test.dir
-/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/opencv_tests/CMakeFiles/_catkin_empty_exported_target.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment2B_turtlebotteleop/CMakeFiles/install/strip.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment2B_turtlebotteleop/CMakeFiles/install/local.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment2B_turtlebotteleop/CMakeFiles/edit_cache.dir
@@ -186,6 +193,13 @@
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/rebuild_cache.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/edit_cache.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/assignment4_trackingandfollowing/CMakeFiles/test.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/CMakeFiles/install/strip.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/CMakeFiles/install/local.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/CMakeFiles/install.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/CMakeFiles/list_install_components.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/CMakeFiles/rebuild_cache.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/CMakeFiles/edit_cache.dir
+/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/CMakeFiles/test.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/image_geometry/CMakeFiles/install/strip.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/image_geometry/CMakeFiles/install/local.dir
 /home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/vision_opencv/image_geometry/CMakeFiles/install.dir

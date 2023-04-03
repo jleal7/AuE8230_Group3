@@ -49,3 +49,17 @@ The trace callback of the program is as follows:
 ### Launch File Explanation
 
 The launch file for the real life implementation is the same as for the gazebo implementation but does not need to call Gazebo and calls LineTrack_real.py instead of LineTrack_gazebo.py. The only change in LineTrack_real.py versus LineTrack_gazebo.py was that our track was white and not yellow. So we took a screenshot of the image and used a color picker to tune in our new track color values. The linear and angular speeds were also cut in half to make sure track of line was not lost.
+
+# Part 2 - April Tag 
+
+## Steps on how to run 
+1. Start roscore
+2. ssh into the turtlebot and do bringup for the bot (roslaunch turtlebot3_bringup turtlebot3_robot.launch)
+3. Perform another bring up for the camera module after ssh'ing into the turtlebot the 2nd time (roslaunch turtlebot3_autorace_camera raspberry_pi_camera_publish.launch)
+4. By running "rqt" check whether the camera is working fine
+5. Put roslaunch apriltag_ros continuous_detection.launch camera_name:= camera image_topic:= image
+6. By running "rqt" again, in the tag_detction topic you must be able to see tha camera detecting the april Tag.
+7. In a new terminal, run the command - "roslaunch assignment4_trackingandfollowing aprilTag.launch"
+   Or, the same step can be accomplished by running the python file in the terminal by using the command - "roslaunch assignment4_trackingandfollowing aprilTag.py"
+
+One way to trouble shoot if the bot does'nt run is to check if the tag detection is getting an output with "rostopic echo /tag_detection"

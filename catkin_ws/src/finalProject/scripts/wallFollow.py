@@ -10,10 +10,7 @@ import numpy as np
 #assumes robot starts facing near direction it wants to go. If desired direction is behind robot this won't work!
 
 #function called everytime we get a new lidar scan
-def callback(msg):
-	#any range further than the max range of the lidar will get returned as INF.
-	#so can't just find the furthest away point (np.argmax(ranges)) since there will be a group of INFs and need to take middle ones
-	
+def callback(msg):	
 	ranges = np.array(msg.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
 	
 	#our lidar returns 0 for values outside max range. So convert these indices from 0 to inf
@@ -156,16 +153,6 @@ if __name__ == '__main__':
 		#code won't run unless this while loop is present so have it with a pass
 		while not rospy.is_shutdown():
 			pass
-		#	vel.linear.x = 0.2
-		#	vel.linear.y = 0
-		#	vel.linear.z = 0
-		#	vel.angular.x = 0
-		#	vel.angular.y = 0
-		#	vel.angular.z = 0
-			
-		#	publisher.publish(vel)
-			
-		#	rate.sleep()
 		
 	except rospy.ROSInterruptException:
 		pass

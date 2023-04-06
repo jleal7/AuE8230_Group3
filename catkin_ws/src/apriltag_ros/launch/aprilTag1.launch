@@ -1,5 +1,0 @@
-<launch>
-
-  <node pkg="apriltag_ros" type="aprilTag.py" name="follow_april_tag" output="screen">
-  </node>
-</launch>

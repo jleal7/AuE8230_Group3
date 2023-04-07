@@ -1,11 +1,14 @@
 <launch>
 
+  <env name="GAZEBO_MODEL_PATH" value="$(find aue_finals)/models"/>
+
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="multi_robot_name" default=""/>
-  <arg name="x_pos" default="-0.2"/>
+  <arg name="x_pos" default="-0.5"/>
   <arg name="y_pos" default="1.6"/>
   <arg name="z_pos" default="0"/>  
   <arg name="yaw_pos" default="3.14"/>
+  <arg name="extra_gazebo_args" default="--verbose"/>
 
 
 
@@ -16,6 +19,7 @@
     <arg name="gui" value="true"/>
     <arg name="headless" value="false"/>
     <arg name="debug" value="false"/>
+    <arg name="extra_gazebo_args" value="$(arg extra_gazebo_args)"/>
   </include>  
 
    <!--<include file="$(find person_sim)/launch/init_small_standing_person.launch">

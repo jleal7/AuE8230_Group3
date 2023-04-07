@@ -4,6 +4,7 @@
 
 ### Execute Launch File
 
+roslaunch finalProject simulation.launch --screen
 
 ### Launch File Explanation
 
@@ -34,4 +35,4 @@ Launch file just creates a node which calls the WallFollow.py script.
 
 2. roslaunch turtlebot3_bringup turtlebot3_robot.launch on turtlebot
 
-3. roslaunch finalProject wallFollow.launch --screen
+3. roslaunch finalProject realLife.launch --screen

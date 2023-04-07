@@ -1,0 +1,10 @@
+<launch>
+  <!-- already made changes to launch file in aue_finals pkg to make it work right -->
+  <include file="$(find aue_finals)/launch/turtlebot3_autonomy_final.launch"/>
+  
+  <node pkg="finalProject" type="wallFollow_gazebo.py" name="Controller"/>
+</launch>
+
+
+
+

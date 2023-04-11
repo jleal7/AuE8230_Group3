@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import matplotlib.pyplot as plt
 import rospy
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan #message type used by /scan topic for laser scan data
@@ -38,7 +37,7 @@ def callback(msg):
 	#safety net to avoid hitting wall at all costs
 	
 	#if hit left wall turn right
-	if np.amin(ranges[0:90-15]) < 0.25: #too close to wall, turn right, usually hitting left wall
+	if np.amin(ranges[44:90]) < 0.20: #if we're driving at the left side wall (okay to be driving parallel to it so dont use 0:45 deg ranges)
 		print("Too close to left wall! d = %f"%np.amin(ranges))
 		vel.linear.x = 0
 		vel.linear.y = 0
@@ -53,7 +52,7 @@ def callback(msg):
 		return #if heading towards wall, turn right and *exit* callback function
 		
 	#if hit right wall turn left
-	if np.amin(ranges[90+15:]) < 0.25: #too close to wall, turn right, usually hitting left wall
+	if np.amin(ranges[90:135]) < 0.20: #too close to wall, turn right, usually hitting left wall
 		print("Too close to right wall! d = %f"%np.amin(ranges))
 		vel.linear.x = 0
 		vel.linear.y = 0
@@ -93,7 +92,7 @@ def callback(msg):
 			vel.linear.z = 0
 			vel.angular.x = 0
 			vel.angular.y = 0
-			vel.angular.z = turn*-4
+			vel.angular.z = turn*-2
 		else: #if opening is to our left, make a left turn (+z)
 			print("	INF: turning left")
 			vel.linear.x = forward
@@ -101,7 +100,7 @@ def callback(msg):
 			vel.linear.z = 0
 			vel.angular.x = 0
 			vel.angular.y = 0
-			vel.angular.z = turn*4
+			vel.angular.z = turn*2
 				
 		publisher.publish(vel)
 		rate.sleep()
@@ -125,7 +124,7 @@ def callback(msg):
 			vel.linear.z = 0
 			vel.angular.x = 0
 			vel.angular.y = 0
-			vel.angular.z = turn*-1
+			vel.angular.z = turn*-2
 		else: #if opening is to our left, make a left turn (+z)
 			print("	REAL #: turning left")
 			vel.linear.x = forward
@@ -133,7 +132,7 @@ def callback(msg):
 			vel.linear.z = 0
 			vel.angular.x = 0
 			vel.angular.y = 0
-			vel.angular.z = turn
+			vel.angular.z = turn*2
 				
 		publisher.publish(vel)
 		rate.sleep()

@@ -6,10 +6,11 @@
   <arg name="multi_robot_name" default=""/>
   
   <!-- original start position (x,y,z,theta) = (-0.5,1.6,0,3.14) -->
-  <arg name="x_pos" default="-0.2"/>
-  <arg name="y_pos" default="-1.8"/>
+  <!-- line follow use (x,y,z,theta) = (-0.2,-1.8,0,6.28) -->
+  <arg name="x_pos" default="-0.5"/>
+  <arg name="y_pos" default="1.6"/>
   <arg name="z_pos" default="0"/>  
-  <arg name="yaw_pos" default="6.28"/>
+  <arg name="yaw_pos" default="3.14"/>
   <arg name="extra_gazebo_args" default="--verbose"/>
 
 
@@ -24,8 +25,8 @@
     <arg name="extra_gazebo_args" value="$(arg extra_gazebo_args)"/>
   </include>  
 
-   <!--<include file="$(find person_sim)/launch/init_small_standing_person.launch">
-   </include>-->
+   <!--include file="$(find person_sim)/launch/init_small_standing_person.launch">
+   </include-->
 
    <!--<include file="$(find turtle_tf_3d)/launch/person_standing_keyboard_move.launch">
    </include>-->
@@ -39,9 +40,13 @@
     <param name="tf_prefix" value="$(arg multi_robot_name)"/>
   </node>-->
   
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find finalProject)/urdf/original/turtlebot3_$(arg model).urdf.xacro" />
+  
+  <param name="robot_description2" command="$(find xacro)/xacro --inorder $(find finalProject)/urdf/aprilTag/turtlebot3_$(arg model).urdf.xacro" />
 
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -Y $(arg yaw_pos) -param robot_description" />
+  
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf2" args="-urdf -model turtlebot3_2 -x 0 -y 0 -z 0 -Y $(arg yaw_pos) -param robot_description2" />
 
   <!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_gazebo)/rviz/turtlebot3_gazebo_model.rviz"/>-->
 </launch>

@@ -1,8 +1,9 @@
 <launch>
 
+  <!-- NEED TO HAVE DONE "export GAZEBO_MODEL_PATH = ..." FIRST IN UBUNTU TERMINAL -->
   <env name="GAZEBO_MODEL_PATH" value="$(find aue_finals)/models"/>
 
-  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <!--arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/-->
   <arg name="multi_robot_name" default=""/>
   
   <!-- original start position (x,y,z,theta) = (-0.5,1.6,0,3.14) -->
@@ -40,12 +41,11 @@
     <param name="tf_prefix" value="$(arg multi_robot_name)"/>
   </node>-->
   
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find finalProject)/urdf/original/turtlebot3_$(arg model).urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find aue_finals)/urdf/original/turtlebot3_burger.urdf.xacro" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_1 -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -Y $(arg yaw_pos) -param robot_description" />
   
-  <param name="robot_description2" command="$(find xacro)/xacro --inorder $(find finalProject)/urdf/aprilTag/turtlebot3_$(arg model).urdf.xacro" />
-
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -Y $(arg yaw_pos) -param robot_description" />
   
+  <param name="robot_description2" command="$(find xacro)/xacro --inorder $(find aue_finals)/urdf/aprilTag_robot/turtlebot3_burger.urdf.xacro" />
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf2" args="-urdf -model turtlebot3_2 -x 0 -y 0 -z 0 -Y $(arg yaw_pos) -param robot_description2" />
 
   <!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_gazebo)/rviz/turtlebot3_gazebo_model.rviz"/>-->

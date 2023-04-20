@@ -66,8 +66,9 @@ class LineFollower(object):
 
         # We get image dimensions and crop the parts of the image we dont need
         height, width, channels = cv_image.shape
-        crop_img = cv_image[int((height/2)+100):int((height/2)+120)][1:int(width)] #crop height keep same width
+        #crop_img = cv_image[int((height/2)+100):int((height/2)+120)][1:int(width)] #crop height keep same width
         #crop_img = cv_image[340:360][1:640]
+        crop_img = cv_image[int(height-20):int(height)][1:int(width)] #keep all of width, take only last 20 pixels of image in height (closer lookahead distance follows line better)
 
         # Convert from RGB to HSV
         hsv = cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
@@ -110,17 +111,27 @@ class LineFollower(object):
         ###   ENTER CONTROLLER HERE   ###
         
         if foundLine == True:
-            tolerance = 30
-            if cx > width/2+tolerance:
-                twist_object.linear.x = 0
-                twist_object.angular.z = -0.2
-            elif cx < width/2-tolerance:
-                twist_object.linear.x = 0
-                twist_object.angular.z = 0.2
-            else:
-                twist_object.linear.x = 0.15
-                twist_object.angular.z = 0
+            #this code did not turn more or else depending on how far from centerline the blob is
+            #tolerance = 5
+            #if cx > width/2+tolerance: #blob to right of centerline
+            #    twist_object.linear.x = 0
+            #    twist_object.angular.z = -0.2 #turn right
+            #elif cx < width/2-tolerance:
+            #    twist_object.linear.x = 0
+            #    twist_object.angular.z = 0.2
+            #else:
+            #    twist_object.linear.x = 0.15
+            #    twist_object.angular.z = 0
+            
+            #this code turns more if the blob is further from centerline, should allow me to use constant longitudinal velocity
+            Kp = 0.4;
+            twist_object.linear.x = 0.15 #can't go full 0.2
+            #if blob is on centerline, division will be 0, if blob is all the way right on screen, division will be 1.
+            #Kp convert [0,1] range to [0,0.4] rad/s range
+            #cx-(width/2) is positive when blob is right of centerline so need to multiply by negative Kp to get right turn
+            twist_object.angular.z = -Kp * ((cx-width/2)/(width/2))
         else:
+            twist_object.linear.x = 0
             twist_object.angular.z = 0.2
             
         print("cx = %f. mid = %f" % (cx,width/2))

@@ -1,0 +1,16 @@
+material aprilTag
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture aprilTag.png
+        filtering none none none
+        scale 1 1
+      }
+    }
+  }
+}
+

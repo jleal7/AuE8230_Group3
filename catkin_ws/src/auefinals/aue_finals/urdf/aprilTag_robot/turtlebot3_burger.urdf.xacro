@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<robot name="turtlebot3_burger" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find finalProject)/urdf/original/common_properties.xacro"/>
-  <xacro:include filename="$(find finalProject)/urdf/original/turtlebot3_burger.gazebo.xacro"/>
+<robot name="turtlebot3_2" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find aue_finals)/urdf/aprilTag_robot/common_properties.xacro"/>
+  <xacro:include filename="$(find aue_finals)/urdf/aprilTag_robot/turtlebot3_burger.gazebo.xacro"/>
 
   <link name="base_footprint"/>
 
@@ -34,6 +34,54 @@
                iyy="2.1193702e-03" iyz="-5.0120904e-06"
                izz="2.0064271e-03" />
     </inertial>
+  </link>
+  
+  <joint name="aprilTag_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="aprilTag_link"/>
+    <origin xyz=".15 0 0.2" rpy="0 0 0"/>
+  </joint>
+  
+  <link name="aprilTag_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.3 0.3"/>
+      </geometry>
+      <!--material>
+        <script>
+          <uri>model://aprilTag/materials/scripts</uri>
+          <uri>model://aprilTag/materials/textures</uri>
+          <name>aprilTag</name>
+        </script>
+      </material-->
+      <!--material name="black"/-->
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0.001 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.3 0.3"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0"
+               izz="0.001" />
+    </inertial>
+    
+    <!--gazebo>
+      <material>
+        <script>
+          <uri>model://aprilTag/materials/scripts</uri>
+          <uri>model://aprilTag/materials/textures</uri>
+          <name>aprilTag</name>
+        </script>
+      </material>
+    </gazebo-->
   </link>
 
   <joint name="wheel_left_joint" type="continuous">
@@ -161,34 +209,5 @@
                izz="0.001" />
     </inertial>
   </link>
-
-  <joint name="camera_joint" type="fixed">
-    <origin xyz="0.073 -0.011 0.084" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="camera_link"/>
-  </joint>
-
-  <link name="camera_link">
-    <collision>
-      <origin xyz="0.005 0.011 0.013" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.015 0.030 0.027"/>
-      </geometry>
-    </collision>
-  </link>
-
-  <joint name="camera_rgb_joint" type="fixed">
-    <origin xyz="0.003 0.011 0.009" rpy="0 0 0"/>
-    <parent link="camera_link"/>
-    <child link="camera_rgb_frame"/>
-  </joint>
-  <link name="camera_rgb_frame"/>
-
-  <joint name="camera_rgb_optical_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="-1.57 0 -1.57"/>
-    <parent link="camera_rgb_frame"/>
-    <child link="camera_rgb_optical_frame"/>
-  </joint>
-  <link name="camera_rgb_optical_frame"/>
 
 </robot>

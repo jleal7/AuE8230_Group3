@@ -64,3 +64,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/finalProject" TYPE PROGRAM FILES "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/catkin_generated/installspace/lineTrack_gazebo.py")
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/finalProject" TYPE PROGRAM FILES "/home/jairo/Desktop/AuE8230_Group3/catkin_ws/build/finalProject/catkin_generated/installspace/keyboardInput.py")
+endif()
+

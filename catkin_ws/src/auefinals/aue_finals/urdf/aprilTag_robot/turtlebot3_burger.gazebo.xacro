@@ -1,10 +1,23 @@
 <?xml version="1.0"?>
-<robot name="turtlebot3_burger_sim" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<robot name="turtlebot3_2_sim" xmlns:xacro="http://ros.org/wiki/xacro">
+  <!--env name="GAZEBO_MODEL_PATH" value="$(find aue_finals)/models"/-->
   <xacro:arg name="laser_visual" default="false"/>
   <xacro:arg name="imu_visual"   default="false"/>
 
   <gazebo reference="base_link">
     <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  
+  <gazebo reference="aprilTag_link">
+    <!--material>
+      <script>
+         <uri>model://aprilTag/materials/scripts</uri>
+         <uri>model://aprilTag/materials/textures</uri>
+         <name>aprilTag</name>
+      </script>
+    </material-->
+    <material>aprilTag</material>
   </gazebo>
 
   <gazebo reference="wheel_left_link">

@@ -1,0 +1,14 @@
+<launch>
+	<!-- state can be 0,1,2,3 or 4. 0 is initial state.-->
+	<param name="state"	value="0" type="int"/>
+	<arg name = "test" value = "$(param state)"/>
+	
+	<node pkg="finalProject" type="keyboardInput.py" name="PythonScript"/>
+
+	<!--node pkg="finalProject" type="combined.py" name="PythonScript"/-->
+	
+	<!--node pkg="node_pkg" type="node_type" name="node_name" if="$(eval param('state') == '0')"/-->
+	
+	<include file="$(find aue_finals)/launch/turtlebot3_autonomy_final.launch" if="$(eval param('state') == '1')"/>
+  
+</launch>

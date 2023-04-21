@@ -1,9 +1,9 @@
 <launch>
-	<node pkg="finalProject" type="keyboardInput.py" name="PythonScript">
-	</node>
+	<!-- state can be 0,1,2,3 or 4. 0 is initial state.-->
+	<!--param name="state"	value="0"/-->
+	
+	<!--node pkg="finalProject" type="keyboardInput.py" name="PythonScript"/-->
 
-	<!--node I added to control turtlebot inside of Gazebo by using Python script-->
-	<!--node pkg="finalProject" type="wallFollow.py" name="PythonScript">
-	</node-->
+	<node pkg="finalProject" type="combined.py" name="PythonScript"/>
   
 </launch>

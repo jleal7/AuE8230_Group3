@@ -5,7 +5,9 @@
   <!-- for line follow task I commented out wallFollow_gazebo.py -->
   <!-- node pkg="finalProject" type="wallFollow_gazebo.py" name="Controller"/ -->
   
-  <node pkg="finalProject" type="lineTrack_gazebo.py" name="Controller"/>
+  <!-- node pkg="finalProject" type="lineTrack_gazebo.py" name="Controller"/-->
+  
+  <node pkg="finalProject" type="combined_gazebo.py" name="Controller"/>
 </launch>
 
 

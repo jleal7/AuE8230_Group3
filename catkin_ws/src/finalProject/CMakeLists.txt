@@ -121,6 +121,12 @@ catkin_install_python(PROGRAMS scripts/lineTrack_gazebo.py
 catkin_install_python(PROGRAMS scripts/keyboardInput.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+catkin_install_python(PROGRAMS scripts/combined.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+catkin_install_python(PROGRAMS scripts/combined_gazebo.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ###########
 ## Build ##

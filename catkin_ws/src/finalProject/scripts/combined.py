@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan #message type used by /scan topic for laser scan data
 from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 import math #so I can use pi, cos and sin
 import numpy as np
 
@@ -85,12 +86,8 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		
-		
-		subscriber.unregister()
 		avd = obstacleAvoidance()
 		subscriber = rospy.Subscriber("/scan", LaserScan, avd.scan_update)
-		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
 		
 	######################################################################################################
 		
@@ -112,18 +109,8 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		#need this to be global so scope lets me access from all funcs
-		#global moveTurtlebot3_object
-		#moveTurtlebot3_object = MoveTurtlebot3()
-		
-		#initial Twist message is all zeros to make it turn to start off with
-		#vel.angular.z = 0.1
-		#publisher.publish(vel)
-		#rate.sleep()
-		
-		#creates a cv bridge, subscribes to camera and creates a MoveTurtlebot3 object
-		line_follower_object = LineFollower()
-		#rate = rospy.Rate(40) #read from lidar 40 times per second
+		line_follower_object = LineFollower() #creates a cv bridge
+		subscriber = rospy.Subscriber("/camera/image/compressed",CompressedImage,line_follower_object.camera_callback,queue_size = 1) #queue_size 1 is very important! or else huge lag
 		
 	######################################################################################################
 		
@@ -335,58 +322,16 @@ class obstacleAvoidance():
 #####################################################################################################################
 #LINE FOLLOW AND STOP SIGN CODE
 
-class MoveTurtlebot3(object):
-
-    def __init__(self):
-        pass
-        #creates an object which publishes (also subscribes for error check) to cmd_vel and initializes a Twist message
-        #self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        #GONNA GET RID OF ALL ERROR CHECKING TO SIMPLIFY IMPLEMENTATION
-        #self.cmd_vel_subs = rospy.Subscriber('/cmd_vel', Twist, self.cmdvel_callback)
-        #self.last_cmdvel_command = Twist()
-        #self._cmdvel_pub_rate = rospy.Rate(40) #publishing to cmd_vel 50 times per second. 10 Hz was creating too much weaving
-
-    #def cmdvel_callback(self,msg):
-    #    self.last_cmdvel_command = msg
-    
-    #def compare_twist_commands(self,twist1,twist2):
-    #    LX = twist1.linear.x == twist2.linear.x
-    #    LY = twist1.linear.y == twist2.linear.y
-    #    LZ = twist1.linear.z == twist2.linear.z
-    #    AX = twist1.angular.x == twist2.angular.x
-    #    AY = twist1.angular.y == twist2.angular.y
-    #    AZ = twist1.angular.z == twist2.angular.z
-    #    equal = LX and LY and LZ and AX and AY and AZ
-    #    if not equal:
-    #        rospy.logwarn("The Current Twist is not the same as the one sent, Resending")
-    #    return equal
-
-    def move_robot(self, twist_object):
-        # We make this to avoid Topic loss, specially at the start
-        current_equal_to_new = False
-        while (not (current_equal_to_new) ):
-            self.cmd_vel_pub.publish(twist_object)
-            self._cmdvel_pub_rate.sleep()
-            current_equal_to_new = self.compare_twist_commands(twist1=self.last_cmdvel_command,
-                                    twist2=twist_object)
-                                    
-    def clean_class(self):
-        # Stop Robot
-        twist_object = Twist()
-        twist_object.angular.z = 0.0
-        self.move_robot(twist_object)
-
-
 class LineFollower(object):
 
     def __init__(self):
         self.bridge_object = CvBridge()
-        #self.image_sub = rospy.Subscriber("/camera/image",Image,self.camera_callback)
-        self.image_sub = rospy.Subscriber("/camera/image/compressed",CompressedImage,self.camera_callback)
 
-    def camera_callback(self, data):
+    def camera_callback(self, ros_data):
         # We select bgr8 because its the OpneCV encoding by default
-        cv_image = self.bridge_object.imgmsg_to_cv2(data, desired_encoding="bgr8")
+        #cv_image = self.bridge_object.imgmsg_to_cv2(data, desired_encoding="bgr8") #if using non-CompressedImage version
+        np_arr = np.frombuffer(ros_data.data, np.uint8)
+        cv_image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
         # We get image dimensions and crop the parts of the image we dont need
         height, width, channels = cv_image.shape
@@ -408,8 +353,8 @@ class LineFollower(object):
         #H: 0 to 360
         #S: 0 to 100
         #V: 0 to  100
-        lower_yellow = np.array([35*(255/360),2*2.55,60*2.55])
-        upper_yellow = np.array([125*(255/360),55*2.55,100*2.55])
+        lower_yellow = np.array([35*(255/360),2*2.55,28*2.55])
+        upper_yellow = np.array([140*(255/360),55*2.55,100*2.55]) #don't go past 140 on H or will start to detect blue reflection of sky
         mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
         # Calculate centroid of the blob of binary image using ImageMoments
@@ -435,8 +380,8 @@ class LineFollower(object):
         ###   ENTER CONTROLLER HERE   ###
         
         if foundLine == True:
-            Kp = 0.2;
-            vel.linear.x = 0.02 #gotta go very slow to account for network lag
+            Kp = 1.5;
+            vel.linear.x = 0.09 #gotta go very slow to account for network lag
             #if blob is on centerline, division will be 0, if blob is all the way right on screen, division will be 1.
             #Kp convert [0,1] range to [0,0.4] rad/s range
             #cx-(width/2) is positive when blob is right of centerline so need to multiply by negative Kp to get right turn
@@ -452,10 +397,6 @@ class LineFollower(object):
         # Make it start turning
         publisher.publish(vel)
         rate.sleep()
-
-    def clean_up(self):
-        #moveTurtlebot3_object.clean_class()
-        cv2.destroyAllWindows()
 
 #####################################################################################################################
 

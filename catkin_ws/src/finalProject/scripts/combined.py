@@ -330,7 +330,8 @@ class LineFollower(object):
 
     def __init__(self):
         self.bridge_object = CvBridge()
-        self.image_sub = rospy.Subscriber("/camera/image",Image,self.camera_callback)
+        #self.image_sub = rospy.Subscriber("/camera/image",Image,self.camera_callback)
+        self.image_sub = rospy.Subscriber("/camera/image/compressed",CompressedImage,self.camera_callback)
 
     def camera_callback(self, data):
         # We select bgr8 because its the OpneCV encoding by default
@@ -356,8 +357,8 @@ class LineFollower(object):
         #H: 0 to 360
         #S: 0 to 100
         #V: 0 to  100
-        lower_yellow = np.array([40*(255/360),4*2.55,60*2.55])
-        upper_yellow = np.array([120*(255/360),50*2.55,100*2.55])
+        lower_yellow = np.array([35*(255/360),2*2.55,60*2.55])
+        upper_yellow = np.array([125*(255/360),55*2.55,100*2.55])
         mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
         # Calculate centroid of the blob of binary image using ImageMoments
@@ -383,8 +384,8 @@ class LineFollower(object):
         ###   ENTER CONTROLLER HERE   ###
         
         if foundLine == True:
-            Kp = 0.4;
-            vel.linear.x = 0.15 #can't go full 0.2
+            Kp = 0.2;
+            vel.linear.x = 0.02 #gotta go very slow to account for network lag
             #if blob is on centerline, division will be 0, if blob is all the way right on screen, division will be 1.
             #Kp convert [0,1] range to [0,0.4] rad/s range
             #cx-(width/2) is positive when blob is right of centerline so need to multiply by negative Kp to get right turn

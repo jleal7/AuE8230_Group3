@@ -27,6 +27,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister() #assume node was previosuly registered to some topic and callback so need to disconnect
+		cv2.destroyAllWindows() #assume other nodes brought up mask and camera windows so close them
 
 		#stop robot moving from previous callback
 		vel.linear.x = 0
@@ -49,6 +50,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
 		vel.linear.y = 0
@@ -71,6 +73,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
 		vel.linear.y = 0
@@ -83,17 +86,6 @@ def on_release(key):
 		rate.sleep()
 		
 		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
-		
-		#need this to be global so scope lets me access from all funcs
-		global moveTurtlebot3_object
-		moveTurtlebot3_object = MoveTurtlebot3()
-		
-		#initial Twist message is all zeros to make it turn to start off with
-		twist_object.angular.z = 0.1
-		
-		#creates a cv bridge, subscribes to camera and creates a MoveTurtlebot3 object
-		line_follower_object = LineFollower()
-		rate = rospy.Rate(40) #read from lidar 40 times per second
 		
 	######################################################################################################
 		
@@ -103,6 +95,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
 		vel.linear.y = 0
@@ -114,7 +107,18 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
+		#need this to be global so scope lets me access from all funcs
+		#global moveTurtlebot3_object
+		#moveTurtlebot3_object = MoveTurtlebot3()
+		
+		#initial Twist message is all zeros to make it turn to start off with
+		#vel.angular.z = 0.1
+		#publisher.publish(vel)
+		#rate.sleep()
+		
+		#creates a cv bridge, subscribes to camera and creates a MoveTurtlebot3 object
+		line_follower_object = LineFollower()
+		#rate = rospy.Rate(40) #read from lidar 40 times per second
 		
 	######################################################################################################
 		
@@ -124,6 +128,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
 		vel.linear.y = 0
@@ -282,26 +287,28 @@ def wallFollow_Callback(msg):
 class MoveTurtlebot3(object):
 
     def __init__(self):
+        pass
         #creates an object which publishes (also subscribes for error check) to cmd_vel and initializes a Twist message
-        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        self.cmd_vel_subs = rospy.Subscriber('/cmd_vel', Twist, self.cmdvel_callback)
-        self.last_cmdvel_command = Twist()
-        self._cmdvel_pub_rate = rospy.Rate(40) #publishing to cmd_vel 50 times per second. 10 Hz was creating too much weaving
+        #self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+        #GONNA GET RID OF ALL ERROR CHECKING TO SIMPLIFY IMPLEMENTATION
+        #self.cmd_vel_subs = rospy.Subscriber('/cmd_vel', Twist, self.cmdvel_callback)
+        #self.last_cmdvel_command = Twist()
+        #self._cmdvel_pub_rate = rospy.Rate(40) #publishing to cmd_vel 50 times per second. 10 Hz was creating too much weaving
 
-    def cmdvel_callback(self,msg):
-        self.last_cmdvel_command = msg
+    #def cmdvel_callback(self,msg):
+    #    self.last_cmdvel_command = msg
     
-    def compare_twist_commands(self,twist1,twist2):
-        LX = twist1.linear.x == twist2.linear.x
-        LY = twist1.linear.y == twist2.linear.y
-        LZ = twist1.linear.z == twist2.linear.z
-        AX = twist1.angular.x == twist2.angular.x
-        AY = twist1.angular.y == twist2.angular.y
-        AZ = twist1.angular.z == twist2.angular.z
-        equal = LX and LY and LZ and AX and AY and AZ
-        if not equal:
-            rospy.logwarn("The Current Twist is not the same as the one sent, Resending")
-        return equal
+    #def compare_twist_commands(self,twist1,twist2):
+    #    LX = twist1.linear.x == twist2.linear.x
+    #    LY = twist1.linear.y == twist2.linear.y
+    #    LZ = twist1.linear.z == twist2.linear.z
+    #    AX = twist1.angular.x == twist2.angular.x
+    #    AY = twist1.angular.y == twist2.angular.y
+    #    AZ = twist1.angular.z == twist2.angular.z
+    #    equal = LX and LY and LZ and AX and AY and AZ
+    #    if not equal:
+    #        rospy.logwarn("The Current Twist is not the same as the one sent, Resending")
+    #    return equal
 
     def move_robot(self, twist_object):
         # We make this to avoid Topic loss, specially at the start
@@ -331,8 +338,9 @@ class LineFollower(object):
 
         # We get image dimensions and crop the parts of the image we dont need
         height, width, channels = cv_image.shape
-        crop_img = cv_image[int((height/2)+100):int((height/2)+120)][1:int(width)] #crop height keep same width
+        #crop_img = cv_image[int((height/2)+100):int((height/2)+120)][1:int(width)] #crop height keep same width
         #crop_img = cv_image[340:360][1:640]
+        crop_img = cv_image[int(height-20):int(height)][1:int(width)] #keep all of width, take only last 20 pixels of image in height (closer lookahead distance follows line better)
 
         # Convert from RGB to HSV
         hsv = cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
@@ -343,10 +351,13 @@ class LineFollower(object):
         To know which color to track in HSV use ColorZilla to get the color registered by the camera in BGR and convert to HSV. 
         """
 
-        # Threshold the HSV image to get only white
-        #HSV = 10 deg, 2.7% sat and 87.1% value
-        lower_yellow = np.array([0,0,190])
-        upper_yellow = np.array([20,15,255])
+        #cv2.inRange RANGE IS 0 TO 255
+        #Online tool ranges:
+        #H: 0 to 360
+        #S: 0 to 100
+        #V: 0 to  100
+        lower_yellow = np.array([40*(255/360),4*2.55,60*2.55])
+        upper_yellow = np.array([120*(255/360),50*2.55,100*2.55])
         mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
         # Calculate centroid of the blob of binary image using ImageMoments
@@ -372,30 +383,26 @@ class LineFollower(object):
         ###   ENTER CONTROLLER HERE   ###
         
         if foundLine == True:
-            print("Line Found!")
-            tolerance = 30
-            if cx > width/2+tolerance:
-                twist_object.linear.x = 0
-                twist_object.angular.z = -0.1
-            elif cx < width/2-tolerance:
-                twist_object.linear.x = 0
-                twist_object.angular.z = 0.1
-            else:
-                twist_object.linear.x = 0.05
-                twist_object.angular.z = 0
+            Kp = 0.4;
+            vel.linear.x = 0.15 #can't go full 0.2
+            #if blob is on centerline, division will be 0, if blob is all the way right on screen, division will be 1.
+            #Kp convert [0,1] range to [0,0.4] rad/s range
+            #cx-(width/2) is positive when blob is right of centerline so need to multiply by negative Kp to get right turn
+            vel.angular.z = -Kp * ((cx-width/2)/(width/2))
         else:
-            print("Looking for line")
-            twist_object.angular.z = 0.1
+            vel.linear.x = 0
+            vel.angular.z = 0.2
             
         print("cx = %f. mid = %f" % (cx,width/2))
         #################################
 
-        rospy.loginfo("ANGULAR VALUE SENT===>"+str(twist_object.angular.z))
+        rospy.loginfo("ANGULAR VALUE SENT===>"+str(vel.angular.z))
         # Make it start turning
-        moveTurtlebot3_object.move_robot(twist_object)
+        publisher.publish(vel)
+        rate.sleep()
 
     def clean_up(self):
-        moveTurtlebot3_object.clean_class()
+        #moveTurtlebot3_object.clean_class()
         cv2.destroyAllWindows()
 
 #####################################################################################################################

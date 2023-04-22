@@ -85,6 +85,11 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
+		
+		
+		subscriber.unregister()
+		avd = obstacleAvoidance()
+		subscriber = rospy.Subscriber("/scan", LaserScan, avd.scan_update)
 		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
 		
 	######################################################################################################
@@ -280,6 +285,52 @@ def wallFollow_Callback(msg):
 ##################################################################################################################
 
 #OBSTACLE AVOIDANCE CODE
+
+class obstacleAvoidance():
+    def __init__(self):
+        pass
+
+        
+    def scan_update(self,data):
+        ranges = np.array(data.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
+        #our lidar returns 0 for values outside max range. So convert these indices from 0 to inf
+
+        ranges[np.where(ranges == 0)] = 20
+        front = min([min(ranges[0:45]),min(ranges[315:359])])
+        left = min(ranges[15:80])
+        right = min(ranges[280:345])
+        
+        print('front : {}'.format(front))
+        print('right: {}'.format(right))
+        print('left: {}'.format(left))
+
+
+        
+        #if self.lookahead_dist == 0:
+        #self.lookahead_dist = 3.5
+        linear_vel = min(0.22,self.long_pid(front))
+        vel.linear.x = linear_vel
+           
+           
+        error = left-right
+        ang_z = min(2.84,self.lat_pid(error))
+        vel.angular.z = ang_z
+           
+           
+        publisher.publish(vel)
+        rate.sleep()
+
+        
+    def long_pid(self,d):
+        kp_long = 0.2
+        return d*kp_long
+        
+    def lat_pid(self,e):
+        kp_lat = 2
+        return e*kp_lat     
+        
+    def obsav(self):
+        pass
 
 #####################################################################################################################
 #LINE FOLLOW AND STOP SIGN CODE

@@ -1,21 +1,26 @@
-# Part 1 - Wall Follow
+# Simulation
 
-## Gazebo Simulation
+## Part 1 - Wall Follow
 
-### Execute Launch File
+### Gazebo Simulation
 
 roslaunch finalProject simulation.launch --screen
 
 ### Launch File Explanation
 
+# Real Life
 
-## Real Life
+## Bringup Commands
 
-## Launch file explenation
+1. LAPTOP: run roscore
 
-Launch file just creates a node which calls the WallFollow.py script.
+2. TURTLEBOT: roslaunch turtlebot3_bringup turtlebot3_robot.launch
 
-## Script Explanation
+3. TURTLEBOT: roslaunch turtlebot3_autorace_camera raspberry_pi_camera_publish.launch
+
+4. LAPTOP: roslaunch finalProject realLife.launch --screen
+
+## Wall Follow Code Explanation
 
 1. Erase back half of ranges to avoid two possible solutions.
 
@@ -28,11 +33,3 @@ Launch file just creates a node which calls the WallFollow.py script.
 5. Case 2: detect group of infs and take average value. Turn until that angle is at center of robot.
 
 6. Safety net that makes robot stop moving and turn away from wall if it ever gets too close.
-
-### Execute Launch File
-
-1. run roscore on laptop
-
-2. roslaunch turtlebot3_bringup turtlebot3_robot.launch on turtlebot
-
-3. roslaunch finalProject realLife.launch --screen

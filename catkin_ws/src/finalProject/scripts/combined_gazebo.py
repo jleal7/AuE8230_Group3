@@ -247,7 +247,6 @@ publisher = rospy.Publisher('/cmd_vel',Twist,queue_size=10)#all states will use 
 vel = Twist() #intialize vel as a Twist message
 rate = rospy.Rate(10)
 
-#DONT DEFINE SUBSRIBER OUT HERE, EVEN THOUGH SHOULD BE GLOBAL, UNSUBSCRIBE DOESN'T WORK THEN
 subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
 
 if __name__ == '__main__':

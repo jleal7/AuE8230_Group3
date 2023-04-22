@@ -1,23 +1,15 @@
 #!/usr/bin/env python3
 
 from pynput import keyboard
+import cv2
+from cv_bridge import CvBridge, CvBridgeError
 import rospy
 import matplotlib.pyplot as plt
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan #message type used by /scan topic for laser scan data
+from sensor_msgs.msg import Image
 import math #so I can use pi, cos and sin
 import numpy as np
-
-rospy.init_node('turtlesim_controller',anonymous=True)
-
-#global variables (need to be used in multiple functions)
-state = 0
-
-publisher = rospy.Publisher('/cmd_vel',Twist,queue_size=10)#all states will use this so put it here for all to use
-vel = Twist() #intialize vel as a Twist message
-rate = rospy.Rate(10)
-
-#don't put LIDAR subscriber here or else callback will always run (ignores state)
 
 def on_press(key):
 	pass
@@ -26,16 +18,28 @@ def on_release(key):
 	#key is pynput.keyboard.KeyCode for letters and numbers
 	#INITIAL STATE IS 0!
 	
+	#to tell Python we are editing a global var inside a function need to write "global subscriber"
+	global subscriber #only need this ONCE
+	
 	#initial state, don't move
 	if key.char == "0":
 		state = 0;
 		print("State " + str(state) + " activated")
+		
+		subscriber.unregister() #assume node was previosuly registered to some topic and callback so need to disconnect
 
+		#stop robot moving from previous callback
 		vel.linear.x = 0
+		vel.linear.y = 0
+		vel.linear.z = 0
+		vel.angular.x = 0
+		vel.angular.y = 0
 		vel.angular.z = 0
 		
 		publisher.publish(vel)
 		rate.sleep()
+		
+		subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)#use empty_callback so won't do anything. ALWAYS need to set subscibrer to unsuscbribe in other parts works
 		
 	####################################################################################################
 		
@@ -44,8 +48,19 @@ def on_release(key):
 		state = 1;
 		print("State " + str(state) + " activated")
 		
-		del subscriber
-		subscriber = rospy.Subscriber("/scan", LaserScan, laser_wallFollow_Callback)
+		subscriber.unregister()
+		
+		vel.linear.x = 0
+		vel.linear.y = 0
+		vel.linear.z = 0
+		vel.angular.x = 0
+		vel.angular.y = 0
+		vel.angular.z = 0
+		
+		publisher.publish(vel)
+		rate.sleep()
+		
+		subscriber = rospy.Subscriber("/scan", LaserScan, wallFollow_Callback)
 		
 		
 	######################################################################################################
@@ -55,8 +70,30 @@ def on_release(key):
 		state = 2;
 		print("State " + str(state) + " activated")
 		
-		del subscriber
-		subscriber = rospy.Subscriber("/scan", LaserScan, DIFFERENT_CALLBACK_FUNC)
+		subscriber.unregister()
+		
+		vel.linear.x = 0
+		vel.linear.y = 0
+		vel.linear.z = 0
+		vel.angular.x = 0
+		vel.angular.y = 0
+		vel.angular.z = 0
+		
+		publisher.publish(vel)
+		rate.sleep()
+		
+		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
+		
+		#need this to be global so scope lets me access from all funcs
+		global moveTurtlebot3_object
+		moveTurtlebot3_object = MoveTurtlebot3()
+		
+		#initial Twist message is all zeros to make it turn to start off with
+		twist_object.angular.z = 0.1
+		
+		#creates a cv bridge, subscribes to camera and creates a MoveTurtlebot3 object
+		line_follower_object = LineFollower()
+		rate = rospy.Rate(40) #read from lidar 40 times per second
 		
 	######################################################################################################
 		
@@ -65,8 +102,19 @@ def on_release(key):
 		state = 3;
 		print("State " + str(state) + " activated")
 		
-		#del subscriber
-		#subscriber = rospy.Subscriber("/scan", LaserScan, DIFFERENT_CALLBACK_FUNC)
+		subscriber.unregister()
+		
+		vel.linear.x = 0
+		vel.linear.y = 0
+		vel.linear.z = 0
+		vel.angular.x = 0
+		vel.angular.y = 0
+		vel.angular.z = 0
+		
+		publisher.publish(vel)
+		rate.sleep()
+		
+		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
 		
 	######################################################################################################
 		
@@ -75,12 +123,29 @@ def on_release(key):
 		state = 4;
 		print("State " + str(state) + " activated")
 		
-		#del subscriber
-		#subscriber = rospy.Subscriber("/scan", LaserScan, DIFFERENT_CALLBACK_FUNC)
+		subscriber.unregister()
+		
+		vel.linear.x = 0
+		vel.linear.y = 0
+		vel.linear.z = 0
+		vel.angular.x = 0
+		vel.angular.y = 0
+		vel.angular.z = 0
+		
+		publisher.publish(vel)
+		rate.sleep()
+		
+		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
 		
 	######################################################################################################
 		
-def laser_wallFollow_Callback(msg):
+def empty_callback(msg):
+	pass
+	
+############################################################################################################
+#Wall Follow Code
+
+def wallFollow_Callback(msg):
 	ranges = np.array(msg.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
 	
 	#our lidar returns 0 for values outside max range. So convert these indices from 0 to inf
@@ -206,6 +271,150 @@ def laser_wallFollow_Callback(msg):
 				
 		publisher.publish(vel)
 		rate.sleep()
+		
+##################################################################################################################
+
+#OBSTACLE AVOIDANCE CODE
+
+#####################################################################################################################
+#LINE FOLLOW AND STOP SIGN CODE
+
+class MoveTurtlebot3(object):
+
+    def __init__(self):
+        #creates an object which publishes (also subscribes for error check) to cmd_vel and initializes a Twist message
+        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+        self.cmd_vel_subs = rospy.Subscriber('/cmd_vel', Twist, self.cmdvel_callback)
+        self.last_cmdvel_command = Twist()
+        self._cmdvel_pub_rate = rospy.Rate(40) #publishing to cmd_vel 50 times per second. 10 Hz was creating too much weaving
+
+    def cmdvel_callback(self,msg):
+        self.last_cmdvel_command = msg
+    
+    def compare_twist_commands(self,twist1,twist2):
+        LX = twist1.linear.x == twist2.linear.x
+        LY = twist1.linear.y == twist2.linear.y
+        LZ = twist1.linear.z == twist2.linear.z
+        AX = twist1.angular.x == twist2.angular.x
+        AY = twist1.angular.y == twist2.angular.y
+        AZ = twist1.angular.z == twist2.angular.z
+        equal = LX and LY and LZ and AX and AY and AZ
+        if not equal:
+            rospy.logwarn("The Current Twist is not the same as the one sent, Resending")
+        return equal
+
+    def move_robot(self, twist_object):
+        # We make this to avoid Topic loss, specially at the start
+        current_equal_to_new = False
+        while (not (current_equal_to_new) ):
+            self.cmd_vel_pub.publish(twist_object)
+            self._cmdvel_pub_rate.sleep()
+            current_equal_to_new = self.compare_twist_commands(twist1=self.last_cmdvel_command,
+                                    twist2=twist_object)
+                                    
+    def clean_class(self):
+        # Stop Robot
+        twist_object = Twist()
+        twist_object.angular.z = 0.0
+        self.move_robot(twist_object)
+
+
+class LineFollower(object):
+
+    def __init__(self):
+        self.bridge_object = CvBridge()
+        self.image_sub = rospy.Subscriber("/camera/image",Image,self.camera_callback)
+
+    def camera_callback(self, data):
+        # We select bgr8 because its the OpneCV encoding by default
+        cv_image = self.bridge_object.imgmsg_to_cv2(data, desired_encoding="bgr8")
+
+        # We get image dimensions and crop the parts of the image we dont need
+        height, width, channels = cv_image.shape
+        crop_img = cv_image[int((height/2)+100):int((height/2)+120)][1:int(width)] #crop height keep same width
+        #crop_img = cv_image[340:360][1:640]
+
+        # Convert from RGB to HSV
+        hsv = cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
+
+        # Define the Yellow Colour in HSV
+
+        """
+        To know which color to track in HSV use ColorZilla to get the color registered by the camera in BGR and convert to HSV. 
+        """
+
+        # Threshold the HSV image to get only white
+        #HSV = 10 deg, 2.7% sat and 87.1% value
+        lower_yellow = np.array([0,0,190])
+        upper_yellow = np.array([20,15,255])
+        mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+
+        # Calculate centroid of the blob of binary image using ImageMoments
+        m = cv2.moments(mask, False)
+        
+        foundLine = True #assume true at start and if division by 0 occurs make it false
+
+        try:
+            cx, cy = m['m10']/m['m00'], m['m01']/m['m00']
+        except ZeroDivisionError:
+            cx, cy = width/2, height/2
+            foundLine = False
+            
+        
+        # Draw the centroid in the resultut image
+        # cv2.circle(img, center, radius, color[, thickness[, lineType[, shift]]]) 
+        cv2.circle(mask,(int(cx), int(cy)), 10,(0,0,255),-1)
+        cv2.imshow("Original", cv_image)
+        cv2.imshow("MASK", mask)
+        cv2.waitKey(1)
+
+        #################################
+        ###   ENTER CONTROLLER HERE   ###
+        
+        if foundLine == True:
+            print("Line Found!")
+            tolerance = 30
+            if cx > width/2+tolerance:
+                twist_object.linear.x = 0
+                twist_object.angular.z = -0.1
+            elif cx < width/2-tolerance:
+                twist_object.linear.x = 0
+                twist_object.angular.z = 0.1
+            else:
+                twist_object.linear.x = 0.05
+                twist_object.angular.z = 0
+        else:
+            print("Looking for line")
+            twist_object.angular.z = 0.1
+            
+        print("cx = %f. mid = %f" % (cx,width/2))
+        #################################
+
+        rospy.loginfo("ANGULAR VALUE SENT===>"+str(twist_object.angular.z))
+        # Make it start turning
+        moveTurtlebot3_object.move_robot(twist_object)
+
+    def clean_up(self):
+        moveTurtlebot3_object.clean_class()
+        cv2.destroyAllWindows()
+
+#####################################################################################################################
+
+#APRIL TAG CODE
+
+#####################################################################################################################
+
+		
+rospy.init_node('turtlesim_controller',anonymous=True)
+
+#global variables (need to be used in multiple functions)
+state = 0
+
+publisher = rospy.Publisher('/cmd_vel',Twist,queue_size=10)#all states will use this so put it here for all to use
+vel = Twist() #intialize vel as a Twist message
+rate = rospy.Rate(40)
+
+subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
 
 if __name__ == '__main__':
 	try:

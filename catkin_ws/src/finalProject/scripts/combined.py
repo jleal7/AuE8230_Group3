@@ -9,6 +9,7 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan #message type used by /scan topic for laser scan data
 from sensor_msgs.msg import Image
 from sensor_msgs.msg import CompressedImage
+from darknet_ros_msgs.msg import BoundingBoxes
 import math #so I can use pi, cos and sin
 import numpy as np
 
@@ -21,6 +22,7 @@ def on_release(key):
 	
 	#to tell Python we are editing a global var inside a function need to write "global subscriber"
 	global subscriber #only need this ONCE
+	global subscriber2 #need two because line following and stop sign task needs to subscribe to two topics
 	
 	#initial state, don't move
 	if key.char == "0":
@@ -28,6 +30,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister() #assume node was previosuly registered to some topic and callback so need to disconnect
+		subscriber2.unregister()
 		cv2.destroyAllWindows() #assume other nodes brought up mask and camera windows so close them
 
 		#stop robot moving from previous callback
@@ -41,7 +44,9 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
 		subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)#use empty_callback so won't do anything. ALWAYS need to set subscibrer to unsuscbribe in other parts works
+		
 		
 	####################################################################################################
 		
@@ -51,6 +56,9 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		#print("passed subscriber1 unsubscribe")
+		subscriber2.unregister()
+		#print("passed subscriber2 unsubscribe")
 		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
@@ -63,7 +71,13 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
+		#print("sent 0 velocity command")
+		
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
+		#print("inited 2nd subscriber")
 		subscriber = rospy.Subscriber("/scan", LaserScan, wallFollow_Callback)
+		#print("inited 1st subscriber")
+		
 		
 		
 	######################################################################################################
@@ -74,6 +88,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		subscriber2.unregister()
 		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
@@ -87,7 +102,10 @@ def on_release(key):
 		rate.sleep()
 		
 		avd = obstacleAvoidance()
+		
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
 		subscriber = rospy.Subscriber("/scan", LaserScan, avd.scan_update)
+		
 		
 	######################################################################################################
 		
@@ -97,6 +115,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		subscriber2.unregister()
 		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
@@ -109,8 +128,12 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
+		global line_follower_object
+		
 		line_follower_object = LineFollower() #creates a cv bridge
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, yolo_callback)
 		subscriber = rospy.Subscriber("/camera/image/compressed",CompressedImage,line_follower_object.camera_callback,queue_size = 1) #queue_size 1 is very important! or else huge lag
+		
 		
 	######################################################################################################
 		
@@ -120,6 +143,7 @@ def on_release(key):
 		print("State " + str(state) + " activated")
 		
 		subscriber.unregister()
+		subscriber2.unregister()
 		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
@@ -132,7 +156,9 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		#subscriber = rospy.Subscriber("/scan", LaserScan, COPY/PASTE YOUR FUNCTION AND CHANGE THIS!!!)
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, yolo_callback)
+		subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
+		
 		
 	######################################################################################################
 		
@@ -143,6 +169,7 @@ def empty_callback(msg):
 #Wall Follow Code
 
 def wallFollow_Callback(msg):
+	print("entered wallFollow callback")
 	ranges = np.array(msg.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
 	
 	#our lidar returns 0 for values outside max range. So convert these indices from 0 to inf
@@ -380,8 +407,8 @@ class LineFollower(object):
         ###   ENTER CONTROLLER HERE   ###
         
         if foundLine == True:
-            Kp = 1.5;
-            vel.linear.x = 0.09 #gotta go very slow to account for network lag
+            Kp = 1;
+            vel.linear.x = 0.05 #gotta go very slow to account for network lag
             #if blob is on centerline, division will be 0, if blob is all the way right on screen, division will be 1.
             #Kp convert [0,1] range to [0,0.4] rad/s range
             #cx-(width/2) is positive when blob is right of centerline so need to multiply by negative Kp to get right turn
@@ -397,6 +424,27 @@ class LineFollower(object):
         # Make it start turning
         publisher.publish(vel)
         rate.sleep()
+        
+def yolo_callback(msg):
+	global detectedStopSign
+	global subscriber
+
+	#msg.bounding_boxes is a python list where each index is a object detected
+	#print("Raw Message:")
+	#print(msg.bounding_boxes)
+	
+	#print("\n for loop mssg:")
+	
+	if detectedStopSign == False:
+		for i in msg.bounding_boxes:
+			if i.Class == "stop sign" or i.Class == "parking meter" or i.Class == "clock":
+				print("DETECTED STOP SIGN!")
+				detectedStopSign = True
+				print("Stopping for 3 seconds")
+				subscriber.unregister() #unsubscribe lidar subscriber (stops callback)
+				rospy.sleep(3.)
+				subscriber = rospy.Subscriber("/camera/image/compressed",CompressedImage,line_follower_object.camera_callback,queue_size = 1) #re-subscribe
+			
 
 #####################################################################################################################
 
@@ -415,6 +463,9 @@ vel = Twist() #intialize vel as a Twist message
 rate = rospy.Rate(40)
 
 subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
+subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
+
+detectedStopSign = False;
 
 if __name__ == '__main__':
 	try:

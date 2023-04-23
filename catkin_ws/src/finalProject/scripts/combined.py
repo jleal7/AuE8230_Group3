@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pynput import keyboard
+from apriltag_ros.msg import AprilTagDetectionArray
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 import rospy
@@ -156,9 +157,9 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, yolo_callback)
-		subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
-		
+		msd = tagFollow()
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
+		subscriber = rospy.Subscriber('/tag_detections',AprilTagDetectionArray,msd.follow)
 		
 	######################################################################################################
 		
@@ -449,6 +450,36 @@ def yolo_callback(msg):
 #####################################################################################################################
 
 #APRIL TAG CODE
+
+class tagFollow():
+    def __init__(self):
+        pass
+    
+    def tag_update(self,data):
+        x = data.detections[0].pose.pose.pose.position.x
+        z = data.detections[0].pose.pose.pose.position.z
+        print('x: {}'.format(x))
+        print('z: {}'.format(z))
+
+
+    def follow(self):
+               
+            while not rospy.is_shutdown():
+
+               gain_x = 0.1
+               gain_z = -1.5
+               
+               if z >= 0.2:
+                   vel.linear.x = z*gain_x
+                   vel.angular.z = x*gain_z
+               
+               else:
+                   vel.linear.x = 0
+                   vel.angular.z = 0
+               
+               #publishing these values
+               publisher.publish(vel)
+               rate.sleep()
 
 #####################################################################################################################
 

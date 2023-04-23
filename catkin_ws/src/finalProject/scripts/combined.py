@@ -25,6 +25,9 @@ def on_release(key):
 	global subscriber #only need this ONCE
 	global subscriber2 #need two because line following and stop sign task needs to subscribe to two topics
 	
+	
+	####################################################################################################
+	
 	#initial state, don't move
 	if key.char == "0":
 		state = 0;
@@ -102,10 +105,8 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		avd = obstacleAvoidance()
-		
 		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
-		subscriber = rospy.Subscriber("/scan", LaserScan, avd.scan_update)
+		subscriber = rospy.Subscriber("/scan", LaserScan, obstacle_avoid_callback)
 		
 		
 	######################################################################################################
@@ -129,11 +130,11 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		global line_follower_object
+		#global line_follower_object
 		
-		line_follower_object = LineFollower() #creates a cv bridge
+		#line_follower_object = LineFollower() #creates a cv bridge
 		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, yolo_callback)
-		subscriber = rospy.Subscriber("/camera/image/compressed",CompressedImage,line_follower_object.camera_callback,queue_size = 1) #queue_size 1 is very important! or else huge lag
+		subscriber = rospy.Subscriber("/camera/image/compressed",CompressedImage,camera_callback,queue_size = 1) #queue_size 1 is very important! or else huge lag
 		
 		
 	######################################################################################################
@@ -157,9 +158,9 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		msd = tagFollow()
 		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
-		subscriber = rospy.Subscriber('/tag_detections',AprilTagDetectionArray,msd.follow)
+		subscriber = rospy.Subscriber('/tag_detections',AprilTagDetectionArray,tag_update)
+		
 		
 	######################################################################################################
 		
@@ -300,62 +301,42 @@ def wallFollow_Callback(msg):
 ##################################################################################################################
 
 #OBSTACLE AVOIDANCE CODE
+def obstacle_avoid_callback(data):
+	ranges = np.array(data.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
+	#our lidar returns 0 for values outside max range. So convert these indices from 0 to inf
+	
+	ranges[np.where(ranges == 0)] = 20
+	front = min([min(ranges[0:45]),min(ranges[315:359])])
+	left = min(ranges[15:80])
+	right = min(ranges[280:345])
+	
+	print('front : {}'.format(front))
+	print('right: {}'.format(right))
+	print('left: {}'.format(left))
+	
+	#if self.lookahead_dist == 0:
+	#self.lookahead_dist = 3.5
+	linear_vel = min(0.22,long_pid(front))
+	vel.linear.x = linear_vel
+	
+	error = left-right
+	ang_z = min(2.84,lat_pid(error))
+	vel.angular.z = ang_z
+	
+	publisher.publish(vel)
+	rate.sleep()
 
-class obstacleAvoidance():
-    def __init__(self):
-        pass
-
-        
-    def scan_update(self,data):
-        ranges = np.array(data.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
-        #our lidar returns 0 for values outside max range. So convert these indices from 0 to inf
-
-        ranges[np.where(ranges == 0)] = 20
-        front = min([min(ranges[0:45]),min(ranges[315:359])])
-        left = min(ranges[15:80])
-        right = min(ranges[280:345])
-        
-        print('front : {}'.format(front))
-        print('right: {}'.format(right))
-        print('left: {}'.format(left))
-
-
-        
-        #if self.lookahead_dist == 0:
-        #self.lookahead_dist = 3.5
-        linear_vel = min(0.22,self.long_pid(front))
-        vel.linear.x = linear_vel
-           
-           
-        error = left-right
-        ang_z = min(2.84,self.lat_pid(error))
-        vel.angular.z = ang_z
-           
-           
-        publisher.publish(vel)
-        rate.sleep()
-
-        
-    def long_pid(self,d):
-        kp_long = 0.2
-        return d*kp_long
-        
-    def lat_pid(self,e):
-        kp_lat = 2
-        return e*kp_lat     
-        
-    def obsav(self):
-        pass
+def long_pid(d):
+	kp_long = 0.2
+	return d*kp_long
+	
+def lat_pid(e):
+	kp_lat = 2
+	return e*kp_lat
 
 #####################################################################################################################
 #LINE FOLLOW AND STOP SIGN CODE
-
-class LineFollower(object):
-
-    def __init__(self):
-        self.bridge_object = CvBridge()
-
-    def camera_callback(self, ros_data):
+def camera_callback(ros_data):
         # We select bgr8 because its the OpneCV encoding by default
         #cv_image = self.bridge_object.imgmsg_to_cv2(data, desired_encoding="bgr8") #if using non-CompressedImage version
         np_arr = np.frombuffer(ros_data.data, np.uint8)
@@ -382,7 +363,7 @@ class LineFollower(object):
         #S: 0 to 100
         #V: 0 to  100
         lower_yellow = np.array([35*(255/360),2*2.55,28*2.55])
-        upper_yellow = np.array([140*(255/360),55*2.55,100*2.55]) #don't go past 140 on H or will start to detect blue reflection of sky
+        upper_yellow = np.array([140*(255/360),60*2.55,100*2.55]) #don't go past 140 on H or will start to detect blue reflection of sky
         mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
         # Calculate centroid of the blob of binary image using ImageMoments
@@ -399,10 +380,10 @@ class LineFollower(object):
         
         # Draw the centroid in the resultut image
         # cv2.circle(img, center, radius, color[, thickness[, lineType[, shift]]]) 
-        cv2.circle(mask,(int(cx), int(cy)), 10,(0,0,255),-1)
-        cv2.imshow("Original", cv_image)
-        cv2.imshow("MASK", mask)
-        cv2.waitKey(1)
+        #cv2.circle(mask,(int(cx), int(cy)), 10,(0,0,255),-1)
+        #cv2.imshow("Original", cv_image)
+        #cv2.imshow("MASK", mask)
+        #cv2.waitKey(1)
 
         #################################
         ###   ENTER CONTROLLER HERE   ###
@@ -444,42 +425,36 @@ def yolo_callback(msg):
 				print("Stopping for 3 seconds")
 				subscriber.unregister() #unsubscribe lidar subscriber (stops callback)
 				rospy.sleep(3.)
-				subscriber = rospy.Subscriber("/camera/image/compressed",CompressedImage,line_follower_object.camera_callback,queue_size = 1) #re-subscribe
+				subscriber = rospy.Subscriber("/camera/image/compressed",CompressedImage,camera_callback,queue_size = 1) #re-subscribe
 			
 
 #####################################################################################################################
 
 #APRIL TAG CODE
-
-class tagFollow():
-    def __init__(self):
-        pass
     
-    def tag_update(self,data):
+def tag_update(data):
+        global x
+        global z
+        
         x = data.detections[0].pose.pose.pose.position.x
         z = data.detections[0].pose.pose.pose.position.z
         print('x: {}'.format(x))
         print('z: {}'.format(z))
-
-
-    def follow(self):
-               
-            while not rospy.is_shutdown():
-
-               gain_x = 0.1
-               gain_z = -1.5
-               
-               if z >= 0.2:
-                   vel.linear.x = z*gain_x
-                   vel.angular.z = x*gain_z
-               
-               else:
-                   vel.linear.x = 0
-                   vel.angular.z = 0
-               
-               #publishing these values
-               publisher.publish(vel)
-               rate.sleep()
+        
+        gain_x = 0.1
+        gain_z = -1.5
+        
+        if z >= 0.2:
+        	vel.linear.x = z*gain_x
+        	vel.angular.z = x*gain_z
+        else:
+        	vel.linear.x = 0
+        	vel.angular.z = 0
+        	
+        #publishing these values
+        publisher.publish(vel)
+        rate.sleep()
+        
 
 #####################################################################################################################
 
@@ -496,7 +471,11 @@ rate = rospy.Rate(40)
 subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
 subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
 
-detectedStopSign = False;
+bridge_object = CvBridge()
+detectedStopSign = False
+
+x = 0
+z = 0
 
 if __name__ == '__main__':
 	try:

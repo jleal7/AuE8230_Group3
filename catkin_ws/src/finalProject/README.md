@@ -18,9 +18,15 @@ roslaunch finalProject simulation.launch --screen
 
 3. TURTLEBOT: roslaunch turtlebot3_autorace_camera raspberry_pi_camera_publish.launch
 
-4. LAPTOP: roslaunch darknet_ros darknet_ros_gdb.launch
+4. LAPTOP: roslaunch turtlebot3_autorace_camera intrinsic_camera_calibration.launch
 
-4. LAPTOP: roslaunch finalProject realLife.launch --screen
+4. LAPTOP: roslaunch apriltag_ros continuous_detection.launch
+
+5. rqt
+
+6. LAPTOP: roslaunch darknet_ros darknet_ros.launch (close before stage 4!)
+
+7. LAPTOP: roslaunch finalProject realLife.launch --screen
 
 ## Wall Follow Code Explanation
 

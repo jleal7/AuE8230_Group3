@@ -1,0 +1,8 @@
+prefix=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/devel_isolated/aue_finals
+
+Name: aue_finals
+Description: Description of aue_finals
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

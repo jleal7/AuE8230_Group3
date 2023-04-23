@@ -1,0 +1,8 @@
+prefix=/home/jairo/Desktop/AuE8230_Group3/catkin_ws/devel_isolated/assignment1c_turtlebot3
+
+Name: assignment1c_turtlebot3
+Description: Description of assignment1c_turtlebot3
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

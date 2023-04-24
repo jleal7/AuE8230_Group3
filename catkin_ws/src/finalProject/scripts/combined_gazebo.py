@@ -2,6 +2,7 @@
 
 from pynput import keyboard
 import rospy
+from apriltag_ros.msg import AprilTagDetectionArray
 import matplotlib.pyplot as plt
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan #message type used by /scan topic for laser scan data
@@ -98,8 +99,22 @@ def on_release(key):
 		state = 4;
 		print("State " + str(state) + " activated")
 		
-		#subscriber.unregister()
-		#subscriber = rospy.Subscriber("/scan", LaserScan, DIFFERENT_CALLBACK_FUNC)
+		subscriber.unregister()
+		subscriber2.unregister()
+		cv2.destroyAllWindows()
+		
+		vel.linear.x = 0
+		vel.linear.y = 0
+		vel.linear.z = 0
+		vel.angular.x = 0
+		vel.angular.y = 0
+		vel.angular.z = 0
+		
+		publisher.publish(vel)
+		rate.sleep()
+		
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
+		subscriber = rospy.Subscriber('/tag_detections',AprilTagDetectionArray,tag_update)
 		
 	######################################################################################################
 	
@@ -310,6 +325,31 @@ vel = Twist() #intialize vel as a Twist message
 rate = rospy.Rate(10)
 
 subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
+
+#APRIL TAG CODE
+    
+def tag_update(data):
+        global x
+        global z
+        
+        x = data.detections[0].pose.pose.pose.position.x
+        z = data.detections[0].pose.pose.pose.position.z
+        print('x: {}'.format(x))
+        print('z: {}'.format(z))
+        
+        gain_x = 0.1
+        gain_z = -1.5
+        
+        if z >= 0.2:
+        	vel.linear.x = z*gain_x
+        	vel.angular.z = x*gain_z
+        else:
+        	vel.linear.x = 0
+        	vel.angular.z = 0
+        	
+        #publishing these values
+        publisher.publish(vel)
+        rate.sleep()
 
 
 if __name__ == '__main__':

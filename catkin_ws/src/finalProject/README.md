@@ -1,13 +1,3 @@
-# Simulation
-
-## Part 1 - Wall Follow
-
-### Gazebo Simulation
-
-roslaunch finalProject simulation.launch --screen
-
-### Launch File Explanation
-
 # Real Life
 
 ## Bringup Commands
@@ -27,6 +17,28 @@ roslaunch finalProject simulation.launch --screen
 6. LAPTOP: roslaunch darknet_ros darknet_ros.launch (close before stage 4!)
 
 7. LAPTOP: roslaunch finalProject realLife.launch --screen
+
+
+
+
+
+
+
+# Simulation
+
+## Bringup Commands
+
+1. roslaunch darknet_ros darknet_ros_gazebo.launch (close before stage 4!) 
+
+2. roslaunch turtlebot3_autorace_camera intrinsic_camera_calibration_gazebo.launch
+
+3. roslaunch apriltag_ros continuous_detection_gazebo.launch
+
+4. rqt
+
+5. roslaunch finalProject simulation.launch --screen
+
+### Launch File Explanation
 
 ## Wall Follow Code Explanation
 

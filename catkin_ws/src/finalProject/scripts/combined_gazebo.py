@@ -3,9 +3,14 @@
 from pynput import keyboard
 import rospy
 from apriltag_ros.msg import AprilTagDetectionArray
+from darknet_ros_msgs.msg import BoundingBoxes
+import cv2
+from cv_bridge import CvBridge, CvBridgeError
 import matplotlib.pyplot as plt
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan #message type used by /scan topic for laser scan data
+from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 import math #so I can use pi, cos and sin
 import numpy as np
 
@@ -18,11 +23,18 @@ def on_release(key):
 	
 	#to tell Python we are editing a global var inside a function need to write "global subscriber"
 	global subscriber #only need this ONCE
+	global subscriber2
+	
+	###################################################################################################
 	
 	#initial state, don't move
 	if key.char == "0":
 		state = 0;
 		print("State " + str(state) + " activated")
+		
+		subscriber.unregister()
+		subscriber2.unregister()
+		cv2.destroyAllWindows()
 		
 		vel.linear.x = 0
 		vel.linear.y = 0
@@ -34,7 +46,7 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		subscriber.unregister()
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
 		subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)#use empty_callback so won't do anything. ALWAYS need to set subscibrer to unsuscbribe in other parts works
 		
 	####################################################################################################
@@ -44,6 +56,10 @@ def on_release(key):
 		state = 1
 		print("State " + str(state) + " activated")
 		
+		subscriber.unregister()
+		subscriber2.unregister()
+		cv2.destroyAllWindows()
+		
 		vel.linear.x = 0
 		vel.linear.y = 0
 		vel.linear.z = 0
@@ -54,7 +70,7 @@ def on_release(key):
 		publisher.publish(vel)
 		rate.sleep()
 		
-		subscriber.unregister()
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
 		subscriber = rospy.Subscriber("/scan", LaserScan, laser_wallFollow_Callback)
 		
 		
@@ -65,6 +81,10 @@ def on_release(key):
 		state = 2;
 		print("State " + str(state) + " activated")
 		
+		subscriber.unregister()
+		subscriber2.unregister()
+		cv2.destroyAllWindows()
+		
 		vel.linear.x = 0
 		vel.linear.y = 0
 		vel.linear.z = 0
@@ -74,7 +94,8 @@ def on_release(key):
 		
 		publisher.publish(vel)
 		rate.sleep()
-				
+		
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
 		subscriber = rospy.Subscriber("/scan", LaserScan, obstacle_avoid_callback)
 
 		
@@ -85,8 +106,22 @@ def on_release(key):
 		state = 3;
 		print("State " + str(state) + " activated")
 		
-		#subscriber.unregister()
-		#subscriber = rospy.Subscriber("/scan", LaserScan, DIFFERENT_CALLBACK_FUNC)
+		subscriber.unregister()
+		subscriber2.unregister()
+		cv2.destroyAllWindows()
+		
+		vel.linear.x = 0
+		vel.linear.y = 0
+		vel.linear.z = 0
+		vel.angular.x = 0
+		vel.angular.y = 0
+		vel.angular.z = 0
+		
+		publisher.publish(vel)
+		rate.sleep()
+		
+		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, yolo_callback)
+		subscriber = rospy.Subscriber("/camera/rgb/image_raw/compressed",CompressedImage,camera_callback,queue_size = 1) #queue_size 1 is very important! or else huge lag
 		
 	######################################################################################################
 		
@@ -110,21 +145,16 @@ def on_release(key):
 		rate.sleep()
 		
 		subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
-		subscriber = rospy.Subscriber('/tag_detections',AprilTagDetectionArray,tag_update)
+		subscriber = rospy.Subscriber('/tag_detections',AprilTagDetectionArray,tag_update,queue_size = 1)
 		
 	######################################################################################################
 	
 def empty_callback(msg):
-	vel.linear.x = 0
-	vel.linear.y = 0
-	vel.linear.z = 0
-	vel.angular.x = 0
-	vel.angular.y = 0
-	vel.angular.z = 0
-		
-	publisher.publish(vel)
-	rate.sleep()
-		
+	pass
+
+##########################################################################################################
+#WALL FOLLOW CODE
+
 def laser_wallFollow_Callback(msg):
 	ranges = np.array(msg.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
 	
@@ -252,7 +282,9 @@ def laser_wallFollow_Callback(msg):
 				
 		publisher.publish(vel)
 		rate.sleep()
-		
+
+##########################################################################################################
+#OBSTACLE AVOIDANCE CODE
 
 def obstacle_avoid_callback(data):
 	ranges = np.array(data.ranges) #msg.ranges is of type tuple so can't modify. Need to convert to array
@@ -285,8 +317,158 @@ def long_pid(d):
 def lat_pid(e):
 	kp_lat = 1.5
 	return e*kp_lat
+	
+##########################################################################################################
+#LINE FOLLOW AND STOP SIGN CODE
 
+def camera_callback(ros_data):
+        # We select bgr8 because its the OpneCV encoding by default
+        #cv_image = self.bridge_object.imgmsg_to_cv2(data, desired_encoding="bgr8") #if using non-CompressedImage version
+        np_arr = np.frombuffer(ros_data.data, np.uint8)
+        cv_image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
+        # We get image dimensions and crop the parts of the image we dont need
+        height, width, channels = cv_image.shape
+        #crop_img = cv_image[int((height/2)+100):int((height/2)+120)][1:int(width)] #crop height keep same width
+        #crop_img = cv_image[340:360][1:640]
+        crop_img = cv_image[int(height-20):int(height)][1:int(width)] #keep all of width, take only last 20 pixels of image in height (closer lookahead distance follows line better)
+
+        # Convert from RGB to HSV
+        hsv = cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
+
+        # Define the Yellow Colour in HSV
+
+        """
+        To know which color to track in HSV use ColorZilla to get the color registered by the camera in BGR and convert to HSV. 
+        """
+
+        #cv2.inRange RANGE IS 0 TO 255
+        #Online tool ranges:
+        #H: 0 to 360
+        #S: 0 to 100
+        #V: 0 to  100
+        lower_yellow = np.array([20,100,100])
+        upper_yellow = np.array([50,255,255]) #don't go past 140 on H or will start to detect blue reflection of sky
+        mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+
+        # Calculate centroid of the blob of binary image using ImageMoments
+        m = cv2.moments(mask, False)
+        
+        foundLine = True #assume true at start and if division by 0 occurs make it false
+
+        try:
+            cx, cy = m['m10']/m['m00'], m['m01']/m['m00']
+        except ZeroDivisionError:
+            cx, cy = width/2, height/2
+            foundLine = False
+            
+        
+        # Draw the centroid in the resultut image
+        #cv2.circle(img, center, radius, color[, thickness[, lineType[, shift]]]) 
+        cv2.circle(mask,(int(cx), int(cy)), 10,(0,0,255),-1)
+        cv2.imshow("Original", cv_image)
+        cv2.imshow("MASK", mask)
+        cv2.waitKey(1)
+
+        #################################
+        ###   ENTER CONTROLLER HERE   ###
+        
+        if foundLine == True:
+            Kp = 1;
+            vel.linear.x = 0.05 #gotta go very slow to account for network lag
+            #if blob is on centerline, division will be 0, if blob is all the way right on screen, division will be 1.
+            #Kp convert [0,1] range to [0,0.4] rad/s range
+            #cx-(width/2) is positive when blob is right of centerline so need to multiply by negative Kp to get right turn
+            vel.angular.z = -Kp * ((cx-width/2)/(width/2))
+        else:
+            vel.linear.x = 0
+            vel.angular.z = 0.2
+            
+        print("cx = %f. mid = %f" % (cx,width/2))
+        #################################
+
+        rospy.loginfo("ANGULAR VALUE SENT===>"+str(vel.angular.z))
+        # Make it start turning
+        publisher.publish(vel)
+        rate.sleep()
+        
+def yolo_callback(msg):
+	global detectedStopSign
+	global subscriber
+
+	#msg.bounding_boxes is a python list where each index is a object detected
+	#print("Raw Message:")
+	#print(msg.bounding_boxes)
+	
+	#print("\n for loop mssg:")
+	
+	if detectedStopSign == False:
+		for i in msg.bounding_boxes:
+			if i.Class == "stop sign" or i.Class == "parking meter" or i.Class == "clock":
+				delta_x = i.xmax - i.xmin
+				delta_y = i.ymax - i.ymin
+				area = delta_x*delta_y
+				print("Stop sign: AREA = " + str(area))
+				
+				if area >= 8000:
+					print("DETECTED STOP SIGN!")
+					detectedStopSign = True
+					print("Stopping for 3 seconds")
+					subscriber.unregister() #unsubscribe lidar subscriber (stops callback)
+					
+					vel.linear.x = 0
+					vel.linear.y = 0
+					vel.linear.z = 0
+					vel.angular.x = 0
+					vel.angular.y = 0
+					vel.angular.z = 0
+					
+					publisher.publish(vel)
+					rate.sleep()
+					
+					rospy.sleep(4.)
+					subscriber = rospy.Subscriber("/camera/rgb/image_raw/compressed",CompressedImage,camera_callback,queue_size = 1) #re-subscribe
+
+##########################################################################################################
+#APRIL TAG CODE
+def tag_update(data):
+        global x
+        global z
+        
+        if len(data.detections) != 0:
+        	x = data.detections[0].pose.pose.pose.position.x
+        	z = data.detections[0].pose.pose.pose.position.z
+        	
+        	print('x: {}'.format(x))
+        	print('z: {}'.format(z))
+        	
+        	gain_x = 0.1
+        	gain_z = -1.5
+        	
+        	if z >= 0.2:
+        		vel.linear.x = z*gain_x
+        		vel.angular.z = x*gain_z
+        	else:
+        		vel.linear.x = 0
+        		vel.angular.z = 0
+        	
+        	#publishing these values
+        	publisher.publish(vel)
+        	rate.sleep()
+        else:
+        	vel.linear.x = 0
+        	vel.linear.y = 0
+        	vel.linear.z = 0
+        	vel.angular.x = 0
+        	vel.angular.y = 0
+        	vel.angular.z = 0
+        	
+        	publisher.publish(vel)
+        	rate.sleep()
+        
+        	print("NO APRIL TAGS DETECTED")
+
+##########################################################################################################
 
 		
 rospy.init_node('turtlesim_controller',anonymous=True)
@@ -299,32 +481,13 @@ vel = Twist() #intialize vel as a Twist message
 rate = rospy.Rate(10)
 
 subscriber = rospy.Subscriber("/scan", LaserScan, empty_callback)
+subscriber2 = rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, empty_callback)
 
-#APRIL TAG CODE
-    
-def tag_update(data):
-        global x
-        global z
-        
-        x = data.detections[0].pose.pose.pose.position.x
-        z = data.detections[0].pose.pose.pose.position.z
-        print('x: {}'.format(x))
-        print('z: {}'.format(z))
-        
-        gain_x = 0.1
-        gain_z = -1.5
-        
-        if z >= 0.2:
-        	vel.linear.x = z*gain_x
-        	vel.angular.z = x*gain_z
-        else:
-        	vel.linear.x = 0
-        	vel.angular.z = 0
-        	
-        #publishing these values
-        publisher.publish(vel)
-        rate.sleep()
+bridge_object = CvBridge()
+detectedStopSign = False
 
+x = 0
+z = 0
 
 if __name__ == '__main__':
 	try:

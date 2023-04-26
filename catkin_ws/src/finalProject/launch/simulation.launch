@@ -1,13 +1,10 @@
 <launch>
-  <!-- already made changes to launch file in aue_finals pkg to make it work right -->
-  <include file="$(find aue_finals)/launch/turtlebot3_autonomy_final.launch"/>
+	<include file="$(find aue_finals)/launch/turtlebot3_autonomy_final.launch"/>
+	<include file="$(find darknet_ros)/launch/darknet_ros.launch"/>
+	<node pkg="finalProject" type="stopsign.py" name="stopsign" output="screen"/>
   
-  <!-- for line follow task I commented out wallFollow_gazebo.py -->
-  <!-- node pkg="finalProject" type="wallFollow_gazebo.py" name="Controller"/ -->
   
-  <!-- node pkg="finalProject" type="lineTrack_gazebo.py" name="Controller"/-->
-  
-  <node pkg="finalProject" type="combined_gazebo.py" name="Controller"/>
+	<!-- node pkg="finalProject" type="wallFollow_gazebo.py" name="Controller"/ -->
+
+
 </launch>
-
-
